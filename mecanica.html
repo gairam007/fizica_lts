@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mecanică — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h1>🎯 <em>Mecanică</em></h1>
+  <p>Mișcare, forțe, energie — explorează legile care guvernează lumea fizică</p>
+  <div class="pills" style="justify-content:center;margin-top:.8rem">
+    <span class="pill pill-blue">Cinematică</span>
+    <span class="pill pill-blue">Dinamică</span>
+    <span class="pill pill-green">Energie</span>
+    <span class="pill pill-amber">Impuls</span>
+    <span class="pill pill-purple">Oscilații</span>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- MIȘCARE UNIFORMĂ + ACCELERATĂ -->
+  <div class="card" id="miscare">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🚀</div>
+      <div><div class="card-title">Mișcare Uniformă & Uniform Accelerată</div>
+      <div class="card-desc">Graficul distanță–timp cu parametri ajustabili</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Viteza inițială v₀</span><strong id="v0v">10 m/s</strong></div>
+          <input type="range" min="0" max="40" value="10" id="v0" oninput="updateMotion()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Accelerație a</span><strong id="av">2 m/s²</strong></div>
+          <input type="range" min="-10" max="10" value="2" id="acc" oninput="updateMotion()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Timp total t</span><strong id="tv">5 s</strong></div>
+          <input type="range" min="1" max="15" value="5" id="tmax" oninput="updateMotion()">
+        </div>
+        <div class="formula-box">x = v₀·t + ½·a·t²</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Distanță</div><div class="result-value" id="dist-v"></div></div>
+          <div class="result-item"><div class="result-label">Viteză finală</div><div class="result-value" id="vf-v"></div></div>
+          <div class="result-item"><div class="result-label">Tip mișcare</div><div class="result-value" id="tip-v" style="font-size:.85rem"></div></div>
+        </div>
+      </div>
+      <div><canvas id="motionC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CĂDERE LIBERĂ -->
+  <div class="card" id="cadere">
+    <div class="card-header">
+      <div class="card-icon icon-purple">🍎</div>
+      <div><div class="card-title">Cădere Liberă</div>
+      <div class="card-desc">Simulare cu g = 9.81 m/s², rezistență opțională a aerului</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Înălțime h</span><strong id="hv">50 m</strong></div>
+          <input type="range" min="5" max="300" value="50" id="hfall" oninput="updateFall()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Masă m</span><strong id="mv">1 kg</strong></div>
+          <input type="range" min="1" max="100" value="1" id="mfall" oninput="updateFall()">
+        </div>
+        <label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--muted);cursor:pointer;margin:.7rem 0">
+          <input type="checkbox" id="airR" onchange="updateFall()" style="accent-color:var(--accent)">
+          Include rezistența aerului
+        </label>
+        <div class="formula-box">h = ½·g·t² &nbsp;|&nbsp; v = g·t</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Timp cădere</div><div class="result-value" id="ft-v"></div></div>
+          <div class="result-item"><div class="result-label">Viteză impact</div><div class="result-value" id="fv-v"></div></div>
+          <div class="result-item"><div class="result-label">Energie cinetică</div><div class="result-value" id="ek-v"></div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="animFall()">▶ Animează</button>
+          <button class="btn btn-ghost" onclick="resetFall()">↺ Reset</button>
+        </div>
+      </div>
+      <div><canvas id="fallC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- PROIECTIL -->
+  <div class="card" id="proiectil">
+    <div class="card-header">
+      <div class="card-icon icon-amber">🎯</div>
+      <div><div class="card-title">Mișcarea Proiectilului</div>
+      <div class="card-desc">Traiectorie parabolică 2D cu unghi și viteză inițială</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Viteză inițială v₀</span><strong id="pv0v">30 m/s</strong></div>
+          <input type="range" min="5" max="100" value="30" id="pv0" oninput="updateProj()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Unghi de lansare θ</span><strong id="pav">45°</strong></div>
+          <input type="range" min="1" max="89" value="45" id="pangle" oninput="updateProj()">
+        </div>
+        <div class="formula-box">x = v₀·cos θ·t &nbsp; y = v₀·sin θ·t − ½·g·t²</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Bătaie (Range)</div><div class="result-value" id="pr-v"></div></div>
+          <div class="result-item"><div class="result-label">Înălțime max</div><div class="result-value" id="ph-v"></div></div>
+          <div class="result-item"><div class="result-label">Timp zbor</div><div class="result-value" id="pt-v"></div></div>
+        </div>
+      </div>
+      <div><canvas id="projC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- NEWTON II -->
+  <div class="card" id="newton">
+    <div class="card-header">
+      <div class="card-icon icon-green">⚖️</div>
+      <div><div class="card-title">Legea a II-a Newton — F = m·a</div>
+      <div class="card-desc">Relație vizuală forță–masă–accelerație</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Forța F</span><strong id="fv">20 N</strong></div>
+          <input type="range" min="1" max="200" value="20" id="force" oninput="updateN2()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Masa m</span><strong id="nmv">5 kg</strong></div>
+          <input type="range" min="1" max="100" value="5" id="nmass" oninput="updateN2()">
+        </div>
+        <div class="formula-box">a = F / m</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Accelerație</div><div class="result-value" id="na-v"></div></div>
+        </div>
+        <div style="margin-top:1rem">
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:.3rem">FORȚĂ</div>
+          <div class="meter-track"><div class="meter-fill meter-blue" id="fm1" style="width:10%"></div></div>
+          <div style="font-size:.78rem;color:var(--muted);margin:.5rem 0 .3rem">MASĂ</div>
+          <div class="meter-track"><div class="meter-fill meter-amber" id="fm2" style="width:5%"></div></div>
+          <div style="font-size:.78rem;color:var(--muted);margin:.5rem 0 .3rem">ACCELERAȚIE REZULTANTĂ</div>
+          <div class="meter-track"><div class="meter-fill meter-green" id="fm3" style="width:8%"></div></div>
+        </div>
+      </div>
+      <div>
+        <canvas id="n2c" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSERVAREA ENERGIEI -->
+  <div class="card" id="energie">
+    <div class="card-header">
+      <div class="card-icon icon-red">⚡</div>
+      <div><div class="card-title">Conservarea Energiei Mecanice</div>
+      <div class="card-desc">Schimbul Eₖ ↔ Eₚ pe un plan înclinat</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Masă m</span><strong id="cem">2 kg</strong></div>
+          <input type="range" min="1" max="20" value="2" id="cemass" oninput="updateEnergy()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Înălțime h</span><strong id="ceh">10 m</strong></div>
+          <input type="range" min="1" max="50" value="10" id="ceheight" oninput="updateEnergy()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Poziție pe plan (0=sus, 100=jos)</span><strong id="cepos">50%</strong></div>
+          <input type="range" min="0" max="100" value="50" id="ceposition" oninput="updateEnergy()">
+        </div>
+        <div class="formula-box">Eₜₒₜ = Eₖ + Eₚ = const.</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Eₚ (potențială)</div><div class="result-value" id="ceep"></div></div>
+          <div class="result-item"><div class="result-label">Eₖ (cinetică)</div><div class="result-value" id="ceek"></div></div>
+          <div class="result-item"><div class="result-label">E totală</div><div class="result-value" id="ceet"></div></div>
+        </div>
+      </div>
+      <div><canvas id="energyC" height="200"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+
+<script>
+const g = 9.81;
+let fallAnimId = null;
+let fallT = 0;
+
+// ── MOTION ────────────────────────────────────────────────────────────────────
+function updateMotion(){
+  const v0=+document.getElementById('v0').value;
+  const a=+document.getElementById('acc').value;
+  const t=+document.getElementById('tmax').value;
+  document.getElementById('v0v').textContent=v0+' m/s';
+  document.getElementById('av').textContent=a+' m/s²';
+  document.getElementById('tv').textContent=t+' s';
+  const d=v0*t+.5*a*t*t, vf=v0+a*t;
+  document.getElementById('dist-v').innerHTML=d.toFixed(1)+'<span class="result-unit">m</span>';
+  document.getElementById('vf-v').innerHTML=vf.toFixed(1)+'<span class="result-unit">m/s</span>';
+  document.getElementById('tip-v').textContent=a===0?'Uniformă':a>0?'Accelerată':'Decelerată';
+  drawMotion(v0,a,t);
+}
+function drawMotion(v0,a,tmax){
+  const cv=document.getElementById('motionC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  for(let i=0;i<=4;i++){const y=H/4*i;ctx.strokeStyle='rgba(26,111,168,0.1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const pts=[];
+  for(let i=0;i<=100;i++){const t=tmax*i/100;pts.push(v0*t+.5*a*t*t);}
+  const minD=Math.min(...pts), maxD=Math.max(...pts);
+  const rng=maxD-minD||1;
+  const px=i=>(i/100)*(W-40)+20;
+  const py=d=>H-20-(d-minD)/rng*(H-40);
+  ctx.strokeStyle='#4f9cf9'; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(79,156,249,.4)'; ctx.shadowBlur=8;
+  ctx.beginPath();
+  pts.forEach((d,i)=>{if(i===0)ctx.moveTo(px(i),py(d));else ctx.lineTo(px(i),py(d));});
+  ctx.stroke(); ctx.shadowBlur=0;
+  ctx.fillStyle='#2a5070'; ctx.font='10px Space Grotesk'; ctx.textAlign='left';
+  ctx.fillText('d(t)',4,14); ctx.textAlign='center'; ctx.fillText(tmax+'s',W-20,H-4);
+}
+
+// ── FALL ────────────────────────────────────────────────────────────────────
+function updateFall(){
+  const h=+document.getElementById('hfall').value;
+  const m=+document.getElementById('mfall').value;
+  document.getElementById('hv').textContent=h+' m';
+  document.getElementById('mv').textContent=m+' kg';
+  const t=Math.sqrt(2*h/g), v=g*t, ek=.5*m*v*v;
+  document.getElementById('ft-v').innerHTML=t.toFixed(2)+'<span class="result-unit">s</span>';
+  document.getElementById('fv-v').innerHTML=v.toFixed(1)+'<span class="result-unit">m/s</span>';
+  document.getElementById('ek-v').innerHTML=ek.toFixed(0)+'<span class="result-unit">J</span>';
+  drawFallStatic(h,0);
+}
+function drawFallStatic(h,frac){
+  const cv=document.getElementById('fallC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(16,185,129,.25)'; ctx.fillRect(0,H-14,W,14);
+  ctx.fillStyle='#10b981'; ctx.fillRect(0,H-15,W,1);
+  const y=20+frac*frac*(H-52);
+  const hue=210-frac*60;
+  ctx.fillStyle=`hsl(${hue},75%,58%)`;
+  ctx.shadowColor=`hsla(${hue},75%,58%,.5)`;ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.arc(W/2,y,14,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+  if(frac<.01){
+    ctx.setLineDash([5,4]); ctx.strokeStyle='rgba(245,158,11,.4)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(W/2,34); ctx.lineTo(W/2,H-20); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#2a5070'; ctx.font='11px Space Grotesk'; ctx.textAlign='center';
+    ctx.fillText('h = '+h+' m',W/2+30,H/2);
+  }
+}
+function animFall(){
+  if(fallAnimId){cancelAnimationFrame(fallAnimId);fallAnimId=null;}
+  fallT=0;
+  const h=+document.getElementById('hfall').value;
+  const totalT=Math.sqrt(2*h/g);
+  function step(){
+    const frac=Math.min(fallT/totalT,1);
+    drawFallStatic(h,frac);
+    fallT+=0.025;
+    if(frac<1)fallAnimId=requestAnimationFrame(step);
+  }
+  step();
+}
+function resetFall(){if(fallAnimId){cancelAnimationFrame(fallAnimId);fallAnimId=null;}updateFall();}
+
+// ── PROIECTIL ────────────────────────────────────────────────────────────────
+function updateProj(){
+  const v0=+document.getElementById('pv0').value;
+  const ang=+document.getElementById('pangle').value;
+  document.getElementById('pv0v').textContent=v0+' m/s';
+  document.getElementById('pav').textContent=ang+'°';
+  const rad=ang*Math.PI/180;
+  const vy=v0*Math.sin(rad), vx=v0*Math.cos(rad);
+  const T=2*vy/g, R=vx*T, H2=vy*vy/(2*g);
+  document.getElementById('pr-v').innerHTML=R.toFixed(1)+'<span class="result-unit">m</span>';
+  document.getElementById('ph-v').innerHTML=H2.toFixed(1)+'<span class="result-unit">m</span>';
+  document.getElementById('pt-v').innerHTML=T.toFixed(2)+'<span class="result-unit">s</span>';
+  drawProj(v0,rad,T,R,H2);
+}
+function drawProj(v0,rad,T,R,Hmax){
+  const cv=document.getElementById('projC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(16,185,129,.2)'; ctx.fillRect(0,H-14,W,14);
+  const pad=20,gH=H-35;
+  function sx(x){return pad+x/R*(W-2*pad);}
+  function sy(y){return H-20-y/Hmax*gH;}
+  // trajectory
+  ctx.strokeStyle='rgba(79,156,249,.7)'; ctx.lineWidth=2;
+  ctx.setLineDash([4,3]);
+  ctx.beginPath();
+  for(let i=0;i<=100;i++){
+    const t=T*i/100;
+    const x=v0*Math.cos(rad)*t;
+    const y=v0*Math.sin(rad)*t-.5*g*t*t;
+    if(y<-1)break;
+    if(i===0)ctx.moveTo(sx(x),sy(y));else ctx.lineTo(sx(x),sy(y));
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+  // ball at peak
+  ctx.fillStyle='#f59e0b'; ctx.shadowColor='rgba(245,158,11,.5)';ctx.shadowBlur=8;
+  ctx.beginPath(); ctx.arc(sx(R/2),sy(Hmax),8,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+}
+
+// ── NEWTON II ────────────────────────────────────────────────────────────────
+function updateN2(){
+  const F=+document.getElementById('force').value;
+  const m=+document.getElementById('nmass').value;
+  document.getElementById('fv').textContent=F+' N';
+  document.getElementById('nmv').textContent=m+' kg';
+  const a=F/m;
+  document.getElementById('na-v').innerHTML=a.toFixed(2)+'<span class="result-unit">m/s²</span>';
+  document.getElementById('fm1').style.width=(F/200*100)+'%';
+  document.getElementById('fm2').style.width=(m/100*100)+'%';
+  document.getElementById('fm3').style.width=Math.min(a/20*100,100)+'%';
+  drawN2(F,m,a);
+}
+function drawN2(F,m,a){
+  const cv=document.getElementById('n2c');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  // Ground
+  ctx.fillStyle='rgba(100,116,139,.3)'; ctx.fillRect(0,H-20,W,20);
+  // Box
+  const bw=40+m*1.5, bh=40+m*1.5;
+  const bx=60, by=H-20-bh;
+  ctx.fillStyle='#334155'; ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle='#4f9cf9'; ctx.lineWidth=1.5; ctx.strokeRect(bx,by,bw,bh);
+  // Mass label
+  ctx.fillStyle='#2a5070'; ctx.font='11px Space Grotesk'; ctx.textAlign='center';
+  ctx.fillText(m+'kg',bx+bw/2,by+bh/2+4);
+  // Force arrow
+  const arrowLen=Math.min(F*1.5,W-bx-bw-20);
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=3;
+  ctx.shadowColor='rgba(245,158,11,.5)'; ctx.shadowBlur=8;
+  ctx.beginPath();
+  ctx.moveTo(bx+bw,H-20-bh/2);
+  ctx.lineTo(bx+bw+arrowLen,H-20-bh/2);
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#f59e0b';
+  ctx.beginPath();
+  ctx.moveTo(bx+bw+arrowLen+12,H-20-bh/2);
+  ctx.lineTo(bx+bw+arrowLen,H-20-bh/2-7);
+  ctx.lineTo(bx+bw+arrowLen,H-20-bh/2+7);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#fcd34d'; ctx.font='11px Space Grotesk'; ctx.textAlign='left';
+  ctx.fillText('F='+F+'N  a='+a.toFixed(1)+'m/s²',bx+bw+5,H-25-bh);
+}
+
+// ── ENERGIE ────────────────────────────────────────────────────────────────
+function updateEnergy(){
+  const m=+document.getElementById('cemass').value;
+  const h=+document.getElementById('ceheight').value;
+  const pos=+document.getElementById('ceposition').value/100;
+  document.getElementById('cem').textContent=m+' kg';
+  document.getElementById('ceh').textContent=h+' m';
+  document.getElementById('cepos').textContent=Math.round(pos*100)+'%';
+  const hNow=h*(1-pos);
+  const ep=m*g*hNow, ek=m*g*h-ep;
+  document.getElementById('ceep').innerHTML=ep.toFixed(1)+'<span class="result-unit">J</span>';
+  document.getElementById('ceek').innerHTML=ek.toFixed(1)+'<span class="result-unit">J</span>';
+  document.getElementById('ceet').innerHTML=(m*g*h).toFixed(1)+'<span class="result-unit">J</span>';
+  drawEnergy(pos,ep,ek,m*g*h);
+}
+function drawEnergy(pos,ep,ek,et){
+  const cv=document.getElementById('energyC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  // Slope
+  ctx.strokeStyle='rgba(100,116,139,.5)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(30,20); ctx.lineTo(W-30,H-20); ctx.stroke();
+  // Ball on slope
+  const bx=30+(W-60)*pos;
+  const by=20+(H-40)*pos;
+  const col=`hsl(${200-pos*120},70%,55%)`;
+  ctx.fillStyle=col; ctx.shadowColor=col+'80'; ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.arc(bx,by,12,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+  // Energy bars
+  const barX=W-110, barW=30, barMaxH=H-50;
+  const epH=Math.max((ep/et)*barMaxH,2);
+  const ekH=Math.max((ek/et)*barMaxH,2);
+  ctx.fillStyle='rgba(16,185,129,.7)';ctx.fillRect(barX,H-20-epH,barW,epH);
+  ctx.fillStyle='rgba(79,156,249,.7)';ctx.fillRect(barX+36,H-20-ekH,barW,ekH);
+  ctx.fillStyle='#2a5070'; ctx.font='10px Space Grotesk'; ctx.textAlign='center';
+  ctx.fillText('Eₚ',barX+15,H-6);
+  ctx.fillText('Eₖ',barX+51,H-6);
+}
+
+window.addEventListener('load',()=>{updateMotion();updateFall();updateProj();updateN2();updateEnergy();});
+window.addEventListener('resize',()=>{updateMotion();updateFall();updateProj();updateN2();updateEnergy();});
+</script>
+</body>
+</html>

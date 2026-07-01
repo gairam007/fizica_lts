@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Experimente — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.filter-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.8rem;}
+.filter-btn{
+  padding:.38rem .9rem;border-radius:100px;font-size:.8rem;font-weight:500;
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;transition:all .18s;font-family:'Space Grotesk',sans-serif;
+}
+.filter-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
+.filter-btn.on{background:rgba(79,156,249,.12);border-color:var(--accent);color:var(--accent);}
+
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+.exp-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.3rem;text-decoration:none;color:var(--text);
+  transition:all .2s;display:flex;flex-direction:column;
+}
+.exp-card:hover{border-color:rgba(26,111,168,.3);transform:translateY(-2px);}
+.exp-card .ec-top{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem;}
+.exp-card .ec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.exp-card .ec-title{font-size:.95rem;font-weight:600;}
+.exp-card .ec-desc{font-size:.82rem;color:var(--muted);line-height:1.55;flex:1;}
+.exp-card .ec-foot{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--border);}
+.exp-card .ec-tag{font-size:.72rem;font-weight:600;padding:.18rem .5rem;border-radius:4px;}
+.exp-card .ec-link{font-size:.78rem;color:var(--accent);}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>Toate <em>experimentele</em></h1>
+  <p>Simulări interactive pentru toate capitolele de fizică</p>
+</div>
+
+<div class="wrap">
+
+  <div class="filter-bar">
+    <button class="filter-btn on" data-cat="all" onclick="filter('all',this)">Toate</button>
+    <button class="filter-btn" data-cat="mecanica" onclick="filter('mecanica',this)">🎯 Mecanică</button>
+    <button class="filter-btn" data-cat="electricitate" onclick="filter('electricitate',this)">⚡ Electricitate</button>
+    <button class="filter-btn" data-cat="optica" onclick="filter('optica',this)">🌈 Optică</button>
+    <button class="filter-btn" data-cat="unde" onclick="filter('unde',this)">🌊 Unde</button>
+    <button class="filter-btn" data-cat="termo" onclick="filter('termo',this)">🔥 Termodinamică</button>
+    <button class="filter-btn" data-cat="magnetism" onclick="filter('magnetism',this)">🧲 Magnetism</button>
+  </div>
+
+  <div class="exp-grid" id="exp-grid">
+
+    <!-- MECANICA -->
+    <a class="exp-card" href="mecanica.html#miscare" data-cat="mecanica">
+      <div class="ec-top"><div class="ec-icon icon-blue">🚀</div><div class="ec-title">Mișcare uniformă & accelerată</div></div>
+      <div class="ec-desc">Sliders pentru v₀ și accelerație cu grafic d(t) în timp real.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Mecanică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="mecanica.html#cadere" data-cat="mecanica">
+      <div class="ec-top"><div class="ec-icon icon-purple">🍎</div><div class="ec-title">Cădere liberă</div></div>
+      <div class="ec-desc">Simulare animată cu g = 9.81 m/s² și rezistență opțională a aerului.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Mecanică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="mecanica.html#newton" data-cat="mecanica">
+      <div class="ec-top"><div class="ec-icon icon-green">⚖️</div><div class="ec-title">Legea a II-a Newton</div></div>
+      <div class="ec-desc">F = m·a cu bare vizuale pentru forță, masă și accelerație.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Mecanică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="mecanica.html#proiectil" data-cat="mecanica">
+      <div class="ec-top"><div class="ec-icon icon-amber">🎯</div><div class="ec-title">Mișcarea proiectilului</div></div>
+      <div class="ec-desc">Traiectorie parabolică cu unghi și viteză ajustabile.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Mecanică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="mecanica.html#energie" data-cat="mecanica">
+      <div class="ec-top"><div class="ec-icon icon-red">⚡</div><div class="ec-title">Conservarea energiei</div></div>
+      <div class="ec-desc">Conversie Eₖ ↔ Eₚ pe un plan înclinat animat.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Mecanică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+
+    <!-- ELECTRICITATE -->
+    <a class="exp-card" href="electricitate.html#ohm" data-cat="electricitate">
+      <div class="ec-top"><div class="ec-icon icon-amber">💡</div><div class="ec-title">Legea lui Ohm</div></div>
+      <div class="ec-desc">Grafic U–I interactiv cu calcul putere și energie consumată.</div>
+      <div class="ec-foot"><span class="ec-tag tag-amber">Electricitate</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="electricitate.html#circuit" data-cat="electricitate">
+      <div class="ec-top"><div class="ec-icon icon-blue">🔋</div><div class="ec-title">Circuit serie vs. paralel</div></div>
+      <div class="ec-desc">Rezistențe ajustabile cu rezistență echivalentă calculată live.</div>
+      <div class="ec-foot"><span class="ec-tag tag-amber">Electricitate</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="electricitate.html#condensator" data-cat="electricitate">
+      <div class="ec-top"><div class="ec-icon icon-purple">⚙️</div><div class="ec-title">Condensatorul</div></div>
+      <div class="ec-desc">Încărcare/descărcare RC cu grafic exponențial animat.</div>
+      <div class="ec-foot"><span class="ec-tag tag-amber">Electricitate</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="electricitate.html#camp" data-cat="electricitate">
+      <div class="ec-top"><div class="ec-icon icon-red">🔌</div><div class="ec-title">Câmp electric</div></div>
+      <div class="ec-desc">Linii de câmp între sarcini pozitive și negative.</div>
+      <div class="ec-foot"><span class="ec-tag tag-amber">Electricitate</span><span class="ec-link">Explorează →</span></div>
+    </a>
+
+    <!-- OPTICĂ -->
+    <a class="exp-card" href="optica.html#snell" data-cat="optica">
+      <div class="ec-top"><div class="ec-icon icon-green">🌈</div><div class="ec-title">Legea lui Snell</div></div>
+      <div class="ec-desc">Refracția luminii cu unghi incident și indici de refracție ajustabili.</div>
+      <div class="ec-foot"><span class="ec-tag tag-green">Optică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="optica.html#lentile" data-cat="optica">
+      <div class="ec-top"><div class="ec-icon icon-blue">🔍</div><div class="ec-title">Lentile convergente</div></div>
+      <div class="ec-desc">Formarea imaginii prin lentile cu distanță focală variabilă.</div>
+      <div class="ec-foot"><span class="ec-tag tag-green">Optică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="optica.html#prisma" data-cat="optica">
+      <div class="ec-top"><div class="ec-icon icon-purple">🔺</div><div class="ec-title">Prisma — dispersia luminii</div></div>
+      <div class="ec-desc">Descompunerea luminii albe în spectru vizibil.</div>
+      <div class="ec-foot"><span class="ec-tag tag-green">Optică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+
+    <!-- UNDE -->
+    <a class="exp-card" href="unde.html#sinusoida" data-cat="unde">
+      <div class="ec-top"><div class="ec-icon icon-purple">🌊</div><div class="ec-title">Undă sinusoidală</div></div>
+      <div class="ec-desc">Amplitudine, frecvență și fază cu animație în timp real.</div>
+      <div class="ec-foot"><span class="ec-tag tag-purple">Unde</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="unde.html#interferenta" data-cat="unde">
+      <div class="ec-top"><div class="ec-icon icon-blue">🎵</div><div class="ec-title">Interferența undelor</div></div>
+      <div class="ec-desc">Superpoziția a două unde cu frecvențe diferite.</div>
+      <div class="ec-foot"><span class="ec-tag tag-purple">Unde</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="unde.html#doppler" data-cat="unde">
+      <div class="ec-top"><div class="ec-icon icon-amber">📡</div><div class="ec-title">Efectul Doppler</div></div>
+      <div class="ec-desc">Schimbarea frecvenței în funcție de viteza sursei.</div>
+      <div class="ec-foot"><span class="ec-tag tag-purple">Unde</span><span class="ec-link">Explorează →</span></div>
+    </a>
+
+    <!-- TERMO -->
+    <a class="exp-card" href="termodinamica.html#gaze" data-cat="termo">
+      <div class="ec-top"><div class="ec-icon icon-red">🔥</div><div class="ec-title">Legea gazelor ideale</div></div>
+      <div class="ec-desc">pV = nRT — relație interactivă între presiune, volum și temperatură.</div>
+      <div class="ec-foot"><span class="ec-tag tag-red">Termodinamică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="termodinamica.html#carnot" data-cat="termo">
+      <div class="ec-top"><div class="ec-icon icon-amber">⚙️</div><div class="ec-title">Ciclul Carnot</div></div>
+      <div class="ec-desc">Diagrama p–V a ciclului reversibil cu eficiență calculată.</div>
+      <div class="ec-foot"><span class="ec-tag tag-red">Termodinamică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="termodinamica.html#caldura" data-cat="termo">
+      <div class="ec-top"><div class="ec-icon icon-purple">🌡️</div><div class="ec-title">Transfer de căldură</div></div>
+      <div class="ec-desc">Conducție, convecție, radiație cu model vizual animat.</div>
+      <div class="ec-foot"><span class="ec-tag tag-red">Termodinamică</span><span class="ec-link">Explorează →</span></div>
+    </a>
+
+    <!-- MAGNETISM -->
+    <a class="exp-card" href="magnetism.html#camp" data-cat="magnetism">
+      <div class="ec-top"><div class="ec-icon icon-blue">🧲</div><div class="ec-title">Câmp magnetic</div></div>
+      <div class="ec-desc">Linii de câmp în jurul unui magnet bară sau solenoid.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Magnetism</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="magnetism.html#lorentz" data-cat="magnetism">
+      <div class="ec-top"><div class="ec-icon icon-green">⚡</div><div class="ec-title">Forța Lorentz</div></div>
+      <div class="ec-desc">Traiectoria unei particule încărcate în câmp magnetic uniform.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Magnetism</span><span class="ec-link">Explorează →</span></div>
+    </a>
+    <a class="exp-card" href="magnetism.html#inductie" data-cat="magnetism">
+      <div class="ec-top"><div class="ec-icon icon-purple">🔄</div><div class="ec-title">Inducție electromagnetică</div></div>
+      <div class="ec-desc">Legea lui Faraday — variație flux → FEM indusă.</div>
+      <div class="ec-foot"><span class="ec-tag tag-blue">Magnetism</span><span class="ec-link">Explorează →</span></div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+
+<script>
+function filter(cat, btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.exp-card').forEach(c=>{
+    if(cat==='all'||c.dataset.cat===cat) c.classList.remove('hidden');
+    else c.classList.add('hidden');
+  });
+}
+</script>
+</body>
+</html>

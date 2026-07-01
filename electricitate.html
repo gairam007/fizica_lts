@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Electricitate — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h1>⚡ <em>Electricitate</em></h1>
+  <p>Circuite, câmpuri electrice, condensatori — fundamentele electromagnetismului</p>
+  <div class="pills" style="justify-content:center;margin-top:.8rem">
+    <span class="pill pill-amber">Circuite DC</span>
+    <span class="pill pill-purple">Electrostatică</span>
+    <span class="pill pill-blue">Condensatori</span>
+    <span class="pill pill-green">Câmp electric</span>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- OHM -->
+  <div class="card" id="ohm">
+    <div class="card-header">
+      <div class="card-icon icon-amber">💡</div>
+      <div><div class="card-title">Legea lui Ohm — U = R·I</div>
+      <div class="card-desc">Grafic U–I interactiv cu calcul putere și energie</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Tensiune U</span><strong id="uv">12 V</strong></div>
+          <input type="range" min="1" max="240" value="12" id="uslider" oninput="updateOhm()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Rezistență R</span><strong id="rv">10 Ω</strong></div>
+          <input type="range" min="1" max="1000" value="10" id="rslider" oninput="updateOhm()">
+        </div>
+        <div class="formula-box">I = U / R &nbsp;|&nbsp; P = U·I = I²·R</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Intensitate I</div><div class="result-value" id="iv"></div></div>
+          <div class="result-item"><div class="result-label">Putere P</div><div class="result-value" id="pv"></div></div>
+          <div class="result-item"><div class="result-label">Energie/oră</div><div class="result-value" id="wv"></div></div>
+        </div>
+      </div>
+      <div><canvas id="ohmC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CIRCUIT SERIE / PARALEL -->
+  <div class="card" id="circuit">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🔋</div>
+      <div><div class="card-title">Circuit Serie vs. Paralel</div>
+      <div class="card-desc">Rezistențe echivalente calculate live pentru ambele configurații</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>R₁</span><strong id="r1v">20 Ω</strong></div>
+          <input type="range" min="1" max="200" value="20" id="r1" oninput="updateCircuit()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>R₂</span><strong id="r2v">30 Ω</strong></div>
+          <input type="range" min="1" max="200" value="30" id="r2" oninput="updateCircuit()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>R₃</span><strong id="r3v">50 Ω</strong></div>
+          <input type="range" min="1" max="200" value="50" id="r3" oninput="updateCircuit()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Tensiune sursă U</span><strong id="usv">12 V</strong></div>
+          <input type="range" min="1" max="100" value="12" id="us" oninput="updateCircuit()">
+        </div>
+      </div>
+      <div>
+        <div class="result-box" style="flex-direction:column;gap:.5rem">
+          <div style="font-size:.75rem;color:var(--accent);font-weight:600;text-transform:uppercase">Serie: R₁ + R₂ + R₃</div>
+          <div style="display:flex;gap:1rem">
+            <div class="result-item"><div class="result-label">R echivalent</div><div class="result-value" id="rsv"></div></div>
+            <div class="result-item"><div class="result-label">Curent</div><div class="result-value" id="isv"></div></div>
+          </div>
+          <div class="divider" style="margin:.3rem 0"></div>
+          <div style="font-size:.75rem;color:#a78bfa;font-weight:600;text-transform:uppercase">Paralel: 1/R = 1/R₁ + 1/R₂ + 1/R₃</div>
+          <div style="display:flex;gap:1rem">
+            <div class="result-item"><div class="result-label">R echivalent</div><div class="result-value" id="rpv"></div></div>
+            <div class="result-item"><div class="result-label">Curent total</div><div class="result-value" id="ipv"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <canvas id="circC" height="160"></canvas>
+  </div>
+
+  <!-- CONDENSATOR -->
+  <div class="card" id="condensator">
+    <div class="card-header">
+      <div class="card-icon icon-purple">⚙️</div>
+      <div><div class="card-title">Condensatorul — Încărcare RC</div>
+      <div class="card-desc">Grafic exponențial animat: U(t) = U₀·(1 − e^(−t/τ))</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Rezistență R</span><strong id="rrc">1000 Ω</strong></div>
+          <input type="range" min="100" max="10000" value="1000" id="rrc" oninput="updateRC()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Capacitate C</span><strong id="crc">1000 μF</strong></div>
+          <input type="range" min="100" max="10000" value="1000" id="crc" oninput="updateRC()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Tensiune sursă U₀</span><strong id="urc">12 V</strong></div>
+          <input type="range" min="1" max="100" value="12" id="urc" oninput="updateRC()">
+        </div>
+        <div class="formula-box">τ = R·C &nbsp;|&nbsp; U(t) = U₀(1 − e^(−t/τ))</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Constanta τ</div><div class="result-value" id="tau-v"></div></div>
+          <div class="result-item"><div class="result-label">La t=5τ: ~63%→100%</div><div class="result-value" id="t5tau"></div></div>
+        </div>
+      </div>
+      <div><canvas id="rcC" height="200"></canvas></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="rcAnimBtn" onclick="toggleRCAnim()">▶ Animează încărcarea</button>
+    </div>
+  </div>
+
+  <!-- CÂMP ELECTRIC -->
+  <div class="card" id="camp">
+    <div class="card-header">
+      <div class="card-icon icon-red">🔌</div>
+      <div><div class="card-title">Câmpul Electric — Linii de Câmp</div>
+      <div class="card-desc">Vizualizarea câmpului între sarcini punctuale</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Sarcina q₁ (−10 ... +10)</span><strong id="q1v">+3</strong></div>
+          <input type="range" min="-10" max="10" value="3" id="q1" oninput="drawField()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Sarcina q₂ (−10 ... +10)</span><strong id="q2v">-3</strong></div>
+          <input type="range" min="-10" max="10" value="-3" id="q2" oninput="drawField()">
+        </div>
+        <div class="formula-box">F = k·q₁·q₂ / r²</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Forța la 0.5 m</div><div class="result-value" id="fe-v"></div></div>
+          <div class="result-item"><div class="result-label">Tipul interacțiunii</div><div class="result-value" id="ft-v" style="font-size:.85rem"></div></div>
+        </div>
+      </div>
+      <div><canvas id="fieldC" height="200"></canvas></div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+<script>
+// ── OHM ────────────────────────────────────────────────────────────────────
+function updateOhm(){
+  const U=+document.getElementById('uslider').value;
+  const R=+document.getElementById('rslider').value;
+  document.getElementById('uv').textContent=U+' V';
+  document.getElementById('rv').textContent=R+' Ω';
+  const I=U/R,P=U*I,W=P*3.6;
+  document.getElementById('iv').innerHTML=I.toFixed(3)+'<span class="result-unit">A</span>';
+  document.getElementById('pv').innerHTML=P.toFixed(2)+'<span class="result-unit">W</span>';
+  document.getElementById('wv').innerHTML=W.toFixed(2)+'<span class="result-unit">kJ</span>';
+  drawOhm(U,R);
+}
+function drawOhm(U,R){
+  const cv=document.getElementById('ohmC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  // Grid
+  for(let i=0;i<=4;i++){ctx.strokeStyle='rgba(26,111,168,0.1)';ctx.lineWidth=1;const y=H/4*i;ctx.beginPath();ctx.moveTo(30,y);ctx.lineTo(W-10,y);ctx.stroke();}
+  // Axes
+  ctx.strokeStyle='rgba(26,111,168,0.2)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(30,H-20);ctx.lineTo(W-10,H-20);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(30,H-20);ctx.lineTo(30,10);ctx.stroke();
+  // Curves for 3 resistances
+  const Rs=[R*.5,R,R*2];
+  const colors=['rgba(239,68,68,.7)','rgba(79,156,249,1)','rgba(16,185,129,.7)'];
+  Rs.forEach((r,ri)=>{
+    ctx.strokeStyle=colors[ri];ctx.lineWidth=ri===1?2.5:1.5;
+    ctx.beginPath();
+    for(let u=0;u<=U;u+=U/60){
+      const i=u/r;
+      const x=30+(u/U)*(W-40);
+      const y=H-20-(i/(U/1))*(H-35);
+      if(u===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  });
+  ctx.fillStyle='#4f9cf9';ctx.font='10px Space Grotesk';ctx.textAlign='center';
+  ctx.fillText('R='+R+'Ω',W-40,H-28);
+  ctx.fillStyle='#2a5070';ctx.textAlign='left';ctx.fillText('I↑',2,14);
+  ctx.textAlign='center';ctx.fillText('U→',W/2,H-4);
+}
+
+// ── CIRCUIT ────────────────────────────────────────────────────────────────────
+function updateCircuit(){
+  const r1=+document.getElementById('r1').value;
+  const r2=+document.getElementById('r2').value;
+  const r3=+document.getElementById('r3').value;
+  const U=+document.getElementById('us').value;
+  document.getElementById('r1v').textContent=r1+' Ω';
+  document.getElementById('r2v').textContent=r2+' Ω';
+  document.getElementById('r3v').textContent=r3+' Ω';
+  document.getElementById('usv').textContent=U+' V';
+  const rs=r1+r2+r3;
+  const rp=1/(1/r1+1/r2+1/r3);
+  document.getElementById('rsv').innerHTML=rs.toFixed(0)+'<span class="result-unit">Ω</span>';
+  document.getElementById('isv').innerHTML=(U/rs).toFixed(3)+'<span class="result-unit">A</span>';
+  document.getElementById('rpv').innerHTML=rp.toFixed(2)+'<span class="result-unit">Ω</span>';
+  document.getElementById('ipv').innerHTML=(U/rp).toFixed(3)+'<span class="result-unit">A</span>';
+  drawCircuit(r1,r2,r3,U);
+}
+function drawCircuit(r1,r2,r3,U){
+  const cv=document.getElementById('circC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=160*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||600,H=160;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  ctx.font='11px Space Grotesk'; ctx.textAlign='center';
+  // Series diagram
+  const sx=40,sy=50,ew=60,eh=20,gap=10;
+  ctx.strokeStyle='rgba(79,156,249,.6)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(sx,sy+eh/2);ctx.lineTo(W/2-20,sy+eh/2);ctx.stroke();
+  [[r1,'#4f9cf9'],[r2,'#a78bfa'],[r3,'#6ee7b7']].forEach(([r,c],i)=>{
+    const x=sx+i*(ew+gap);
+    ctx.fillStyle=c+'33';ctx.strokeStyle=c;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.roundRect(x,sy,ew,eh,4);ctx.fill();ctx.stroke();
+    ctx.fillStyle=c;ctx.fillText(r+'Ω',x+ew/2,sy+eh/2+4);
+  });
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('SERIE',sx,sy-8);
+  // Parallel diagram
+  const px=40,py=100;
+  ctx.strokeStyle='rgba(167,139,250,.6)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px,py+2*25);ctx.stroke();
+  [[r1,'#4f9cf9'],[r2,'#a78bfa'],[r3,'#6ee7b7']].forEach(([r,c],i)=>{
+    const y=py+i*25;
+    ctx.fillStyle=c+'33';ctx.strokeStyle=c;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.roundRect(px+10,y,55,20,4);ctx.fill();ctx.stroke();
+    ctx.fillStyle=c;ctx.textAlign='center';ctx.font='10px Space Grotesk';
+    ctx.fillText(r+'Ω',px+37,y+13);
+  });
+  ctx.strokeStyle='rgba(167,139,250,.6)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(px+65,py);ctx.lineTo(px+65,py+2*25);ctx.stroke();
+  ctx.fillStyle='#2a5070';ctx.textAlign='left';ctx.font='10px Space Grotesk';
+  ctx.fillText('PARALEL',px,py-8);
+}
+
+// ── RC ────────────────────────────────────────────────────────────────────
+let rcAnimId=null, rcRunning=false, rcTime=0;
+function updateRC(){
+  const R=+document.getElementById('rrc').value;
+  const C=+document.getElementById('crc').value/1e6;
+  const U0=+document.getElementById('urc').value;
+  document.getElementById('rrc').nextSibling;
+  document.querySelector('[id="rrc"] + * + strong, label').textContent;
+  const tau=R*C;
+  document.getElementById('tau-v').innerHTML=tau.toFixed(3)+'<span class="result-unit">s</span>';
+  document.getElementById('t5tau').innerHTML=(5*tau).toFixed(2)+'<span class="result-unit">s</span>';
+  drawRC(R,C,U0,rcTime);
+}
+function drawRC(R,C,U0,tNow){
+  const cv=document.getElementById('rcC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  const tau=R*C, tMax=5*tau;
+  for(let i=0;i<=4;i++){ctx.strokeStyle='rgba(26,111,168,0.1)';ctx.lineWidth=1;const y=H/4*i;ctx.beginPath();ctx.moveTo(30,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.strokeStyle='rgba(26,111,168,0.15)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(30,H-20);ctx.lineTo(W-10,H-20);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(30,H-20);ctx.lineTo(30,10);ctx.stroke();
+  // Charge curve
+  ctx.strokeStyle='rgba(124,58,237,.8)';ctx.lineWidth=2;
+  ctx.shadowColor='rgba(124,58,237,.4)';ctx.shadowBlur=8;
+  ctx.beginPath();
+  for(let i=0;i<=200;i++){
+    const t=tMax*i/200;
+    const u=U0*(1-Math.exp(-t/tau));
+    const x=30+(t/tMax)*(W-40);
+    const y=H-20-(u/U0)*(H-40);
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();ctx.shadowBlur=0;
+  // Current time marker
+  if(tNow>0&&tNow<=tMax){
+    const u=U0*(1-Math.exp(-tNow/tau));
+    const mx=30+(tNow/tMax)*(W-40);
+    const my=H-20-(u/U0)*(H-40);
+    ctx.fillStyle='#a78bfa';ctx.beginPath();ctx.arc(mx,my,6,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#c4b5fd';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+    ctx.fillText(u.toFixed(1)+'V',mx+8,my-4);
+  }
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('U(t)↑',2,14);ctx.textAlign='center';ctx.fillText('t→',W/2,H-4);
+  ctx.fillText('τ='+tau.toFixed(2)+'s',W-60,30);
+}
+function toggleRCAnim(){
+  rcRunning=!rcRunning;
+  document.getElementById('rcAnimBtn').textContent=rcRunning?'⏸ Pauză':'▶ Animează încărcarea';
+  if(rcRunning){rcTime=0;animRC();}else cancelAnimationFrame(rcAnimId);
+}
+function animRC(){
+  const R=+document.getElementById('rrc').value;
+  const C=+document.getElementById('crc').value/1e6;
+  const U0=+document.getElementById('urc').value;
+  const tau=R*C;
+  drawRC(R,C,U0,rcTime);
+  rcTime+=tau/60;
+  if(rcTime<=5*tau&&rcRunning)rcAnimId=requestAnimationFrame(animRC);
+  else rcRunning=false;
+}
+
+// ── CÂMP ELECTRIC ────────────────────────────────────────────────────────────────
+function drawField(){
+  const q1=+document.getElementById('q1').value;
+  const q2=+document.getElementById('q2').value;
+  document.getElementById('q1v').textContent=(q1>0?'+':'')+q1;
+  document.getElementById('q2v').textContent=(q2>0?'+':'')+q2;
+  const k=8.99e9;
+  const F=k*Math.abs(q1)*Math.abs(q2)*.000000001/0.25;
+  document.getElementById('fe-v').innerHTML=F.toFixed(2)+'<span class="result-unit">mN</span>';
+  document.getElementById('ft-v').textContent=(q1*q2<0)?'Atracție ←→':(q1*q2>0)?'Respingere →←':'Nulă';
+  const cv=document.getElementById('fieldC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  // Draw field lines (simplified)
+  const cx1=W*.3,cy1=H*.5,cx2=W*.7,cy2=H*.5;
+  const nLines=8;
+  for(let i=0;i<nLines;i++){
+    const angle=(i/nLines)*Math.PI*2;
+    const dx=Math.cos(angle),dy=Math.sin(angle);
+    // Simple field line from q1
+    ctx.strokeStyle='rgba(79,156,249,.25)';ctx.lineWidth=1;
+    ctx.beginPath();
+    let x=cx1+dx*20,y=cy1+dy*20;
+    ctx.moveTo(x,y);
+    for(let s=0;s<100;s++){
+      // Field from both charges
+      const dx1=x-cx1,dy1=y-cy1,r1=Math.sqrt(dx1*dx1+dy1*dy1)||1;
+      const dx2=x-cx2,dy2=y-cy2,r2=Math.sqrt(dx2*dx2+dy2*dy2)||1;
+      const fx=q1*dx1/r1/r1/r1+q2*dx2/r2/r2/r2;
+      const fy=q1*dy1/r1/r1/r1+q2*dy2/r2/r2/r2;
+      const fm=Math.sqrt(fx*fx+fy*fy)||1;
+      x+=fx/fm*3;y+=fy/fm*3;
+      if(x<0||x>W||y<0||y>H)break;
+      if(Math.sqrt((x-cx2)*(x-cx2)+(y-cy2)*(y-cy2))<16)break;
+      ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+  // Draw charges
+  function drawCharge(cx,cy,q){
+    const col=q>0?'#ef4444':'#4f9cf9';
+    ctx.fillStyle=col;ctx.shadowColor=col+'80';ctx.shadowBlur=12;
+    ctx.beginPath();ctx.arc(cx,cy,16,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#fff';ctx.font='bold 14px Space Grotesk';ctx.textAlign='center';
+    ctx.fillText(q>0?'+':'−',cx,cy+5);
+  }
+  drawCharge(cx1,cy1,q1);drawCharge(cx2,cy2,q2);
+}
+
+window.addEventListener('load',()=>{
+  updateOhm();updateCircuit();
+  document.getElementById('rrc').id='rrc-range';
+  document.getElementById('crc').id='crc-range';
+  document.getElementById('urc').id='urc-range';
+  // fix IDs
+  document.querySelector('input[oninput="updateRC()"][id="rrc-range"]').addEventListener('input',updateRC);
+  initRC();drawField();
+});
+function initRC(){
+  const tau=(1000)*(1000/1e6);
+  document.getElementById('tau-v').innerHTML=tau.toFixed(3)+'<span class="result-unit">s</span>';
+  document.getElementById('t5tau').innerHTML=(5*tau).toFixed(2)+'<span class="result-unit">s</span>';
+  drawRC(1000,1000/1e6,12,0);
+}
+window.addEventListener('resize',()=>{updateOhm();updateCircuit();drawField();});
+</script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Termodinamică — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h1>🔥 <em>Termodinamică</em></h1>
+  <p>Gaze ideale, transformări termodinamice, ciclul Carnot și transferul de căldură</p>
+  <div class="pills" style="justify-content:center;margin-top:.8rem">
+    <span class="pill pill-red" style="border-color:#ef4444;color:#fca5a5;background:rgba(239,68,68,.08)">Gaze ideale</span>
+    <span class="pill pill-amber">Ciclu Carnot</span>
+    <span class="pill pill-green">Transfer căldură</span>
+    <span class="pill pill-purple">Transformări</span>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- GAZE IDEALE -->
+  <div class="card" id="gaze">
+    <div class="card-header">
+      <div class="card-icon icon-red">🔥</div>
+      <div><div class="card-title">Legea Gazelor Ideale — pV = nRT</div>
+      <div class="card-desc">Relație interactivă între presiune, volum și temperatură</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Presiune p (atm)</span><strong id="pv">1.0 atm</strong></div>
+          <input type="range" min="10" max="100" value="10" id="pgas" oninput="updateGas()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Volum V (L)</span><strong id="vv">22.4 L</strong></div>
+          <input type="range" min="5" max="100" value="224" id="vgas" oninput="updateGas()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Cantitate n (mol)</span><strong id="nv">1.0 mol</strong></div>
+          <input type="range" min="1" max="20" value="10" id="ngas" oninput="updateGas()">
+        </div>
+        <div class="formula-box">pV = nRT &nbsp;|&nbsp; R = 8.314 J/(mol·K)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Temperatura T</div><div class="result-value" id="Tv">—</div></div>
+          <div class="result-item"><div class="result-label">Temperatura t</div><div class="result-value" id="tv">—</div></div>
+          <div class="result-item"><div class="result-label">Energie internă U</div><div class="result-value" id="Uv">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="gasC" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <!-- TRANSFORMĂRI -->
+  <div class="card" id="transformari">
+    <div class="card-header">
+      <div class="card-icon icon-purple">📊</div>
+      <div><div class="card-title">Transformări ale Gazului Ideal — Diagrama p–V</div>
+      <div class="card-desc">Izotermă, izobară, izocoră pe același grafic</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Starea inițială: p₀ (atm)</span><strong id="p0v">2 atm</strong></div>
+          <input type="range" min="1" max="10" value="2" id="p0" oninput="drawPV()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Starea inițială: V₀ (L)</span><strong id="V0v">10 L</strong></div>
+          <input type="range" min="5" max="50" value="10" id="V0" oninput="drawPV()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Factorul de modificare</span><strong id="factv">×2</strong></div>
+          <input type="range" min="11" max="40" value="20" id="fact" oninput="drawPV()">
+        </div>
+        <div class="result-box" style="flex-direction:column;gap:.4rem">
+          <div style="display:flex;gap:1rem;flex-wrap:wrap">
+            <div class="result-item"><div class="result-label" style="color:#4f9cf9">Izotermă</div><div class="result-value" id="izoT" style="color:#4f9cf9;font-size:1rem">p₁V₁=p₂V₂</div></div>
+            <div class="result-item"><div class="result-label" style="color:#f59e0b">Izobară</div><div class="result-value" id="izoB" style="color:#f59e0b;font-size:1rem">V₁/T₁=V₂/T₂</div></div>
+            <div class="result-item"><div class="result-label" style="color:#10b981">Izocoră</div><div class="result-value" id="izoC" style="color:#10b981;font-size:1rem">p₁/T₁=p₂/T₂</div></div>
+          </div>
+        </div>
+      </div>
+      <div><canvas id="pvC" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CARNOT -->
+  <div class="card" id="carnot">
+    <div class="card-header">
+      <div class="card-icon icon-amber">⚙️</div>
+      <div><div class="card-title">Ciclul Carnot — Motor Termic Ideal</div>
+      <div class="card-desc">Eficiența maximă teoretică η = 1 − T₂/T₁</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Temperatura sursei calde T₁ (K)</span><strong id="T1v">800 K</strong></div>
+          <input type="range" min="400" max="1500" value="800" id="T1" oninput="updateCarnot()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Temperatura sursei reci T₂ (K)</span><strong id="T2v">300 K</strong></div>
+          <input type="range" min="200" max="700" value="300" id="T2" oninput="updateCarnot()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Căldura absorbită Q₁ (J)</span><strong id="Q1v">1000 J</strong></div>
+          <input type="range" min="100" max="5000" value="1000" id="Q1" oninput="updateCarnot()">
+        </div>
+        <div class="formula-box">η = 1 − T₂/T₁ &nbsp;|&nbsp; L = η·Q₁</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Eficiență η</div><div class="result-value" id="etav">—</div></div>
+          <div class="result-item"><div class="result-label">Lucru mecanic L</div><div class="result-value" id="Lv">—</div></div>
+          <div class="result-item"><div class="result-label">Căldura cedată Q₂</div><div class="result-value" id="Q2v">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="carnotC" height="220"></canvas></div>
+    </div>
+  </div>
+
+  <!-- TRANSFER CĂLDURĂ -->
+  <div class="card" id="caldura">
+    <div class="card-header">
+      <div class="card-icon icon-green">🌡️</div>
+      <div><div class="card-title">Transfer de Căldură — Q = m·c·ΔT</div>
+      <div class="card-desc">Calculul căldurii necesare pentru modificarea temperaturii</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Masa m (kg)</span><strong id="msv">2 kg</strong></div>
+          <input type="range" min="1" max="50" value="2" id="ms" oninput="updateHeat()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Temperatura inițială t₁ (°C)</span><strong id="t1v">20 °C</strong></div>
+          <input type="range" min="-50" max="200" value="20" id="t1" oninput="updateHeat()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Temperatura finală t₂ (°C)</span><strong id="t2v">100 °C</strong></div>
+          <input type="range" min="-50" max="300" value="100" id="t2" oninput="updateHeat()">
+        </div>
+        <div style="margin:.8rem 0">
+          <label style="font-size:.83rem;color:var(--muted)">Material:</label>
+          <select id="material" onchange="updateHeat()" style="background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.35rem .6rem;font-family:'Space Grotesk',sans-serif;font-size:.83rem;margin-left:.5rem">
+            <option value="4186">Apă (c = 4186 J/kg·K)</option>
+            <option value="900">Aluminiu (c = 900 J/kg·K)</option>
+            <option value="450">Fier (c = 450 J/kg·K)</option>
+            <option value="385">Cupru (c = 385 J/kg·K)</option>
+            <option value="2100">Gheață (c = 2100 J/kg·K)</option>
+            <option value="840">Beton (c = 840 J/kg·K)</option>
+          </select>
+        </div>
+        <div class="formula-box">Q = m·c·ΔT</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">ΔT</div><div class="result-value" id="dTv">—</div></div>
+          <div class="result-item"><div class="result-label">Căldura Q</div><div class="result-value" id="Qv">—</div></div>
+          <div class="result-item"><div class="result-label">Putere (10 min)</div><div class="result-value" id="Ppv">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="heatC" height="220"></canvas></div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+<script>
+const R_GAS=8.314;
+
+// ── GAZE IDEALE ──────────────────────────────────────────────────────────────
+function updateGas(){
+  const p=document.getElementById('pgas').value/10*101325;
+  const V=document.getElementById('vgas').value/10/1000;
+  const n=document.getElementById('ngas').value/10;
+  document.getElementById('pv').textContent=(p/101325).toFixed(1)+' atm';
+  document.getElementById('vv').textContent=(V*1000).toFixed(1)+' L';
+  document.getElementById('nv').textContent=n.toFixed(1)+' mol';
+  const T=p*V/(n*R_GAS);
+  const t=T-273.15;
+  const U=1.5*n*R_GAS*T;
+  document.getElementById('Tv').innerHTML=T.toFixed(1)+'<span class="result-unit">K</span>';
+  document.getElementById('tv').innerHTML=t.toFixed(1)+'<span class="result-unit">°C</span>';
+  document.getElementById('Uv').innerHTML=(U/1000).toFixed(2)+'<span class="result-unit">kJ</span>';
+  drawGas(p/101325,V*1000,T);
+}
+
+function drawGas(p,V,T){
+  const cv=document.getElementById('gasC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=220*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=220;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  // Container
+  const bx=30,by=30,bw=W-100,bh=H-80;
+  ctx.fillStyle='rgba(59,130,246,0.05)'; ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle='rgba(79,156,249,0.4)'; ctx.lineWidth=2;
+  ctx.strokeRect(bx,by,bw,bh);
+
+  // Molecules (random but seeded by T)
+  const nMols=Math.min(Math.floor(T/30),40);
+  const speed=Math.sqrt(T/300);
+  for(let i=0;i<nMols;i++){
+    const mx=bx+10+(Math.sin(i*137.5)*0.5+0.5)*(bw-20);
+    const my=by+10+(Math.cos(i*97.3)*0.5+0.5)*(bh-20);
+    const hue=Math.floor(200+i*7)%360;
+    ctx.fillStyle=`hsla(${hue},70%,65%,0.7)`;
+    ctx.shadowColor=`hsla(${hue},70%,65%,0.3)`;ctx.shadowBlur=4;
+    ctx.beginPath(); ctx.arc(mx,my,3+speed,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+  }
+
+  // Piston (top, moves with pressure)
+  const pistonY=by+Math.min(p*8,bh-10);
+  ctx.fillStyle='rgba(245,158,11,0.4)'; ctx.fillRect(bx,by,bw,pistonY-by);
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(bx,pistonY); ctx.lineTo(bx+bw,pistonY); ctx.stroke();
+
+  // Labels
+  ctx.fillStyle='#2a5070'; ctx.font='10px Space Grotesk'; ctx.textAlign='center';
+  ctx.fillText('p='+p.toFixed(1)+'atm  V='+V.toFixed(1)+'L  T='+T.toFixed(0)+'K',W/2,H-8);
+  ctx.fillStyle='#fcd34d'; ctx.font='bold 11px Space Grotesk';
+  ctx.fillText('↕ piston',W-30,pistonY-3);
+}
+
+// ── p-V DIAGRAM ──────────────────────────────────────────────────────────────
+function drawPV(){
+  const p0=+document.getElementById('p0').value;
+  const V0=+document.getElementById('V0').value;
+  const k=document.getElementById('fact').value/10;
+  document.getElementById('p0v').textContent=p0+' atm';
+  document.getElementById('V0v').textContent=V0+' L';
+  document.getElementById('factv').textContent='×'+k.toFixed(1);
+
+  const cv=document.getElementById('pvC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=220*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=220;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const pad=40, gW=W-pad-10, gH=H-pad-20;
+  const Vmax=V0*k+5, pmax=p0*k+1;
+
+  function sx(v){return pad+(v/Vmax)*gW;}
+  function sy(p){return H-pad-(p/pmax)*gH;}
+
+  // Grid
+  for(let i=0;i<=4;i++){
+    ctx.strokeStyle='rgba(26,111,168,0.1)';ctx.lineWidth=1;
+    const y=H-pad-(i/4)*gH;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+gW,y);ctx.stroke();
+    const x=pad+(i/4)*gW;ctx.beginPath();ctx.moveTo(x,pad);ctx.lineTo(x,H-pad);ctx.stroke();
+  }
+  // Axes
+  ctx.strokeStyle='rgba(26,111,168,0.2)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad,H-pad);ctx.lineTo(pad+gW,H-pad);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,H-pad);ctx.stroke();
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='center';
+  ctx.fillText('V (L)',pad+gW/2,H-4);ctx.textAlign='right';ctx.fillText('p',pad-4,pad+14);
+
+  // Initial point
+  ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.arc(sx(V0),sy(p0),5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fcd34d';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('A('+V0+','+p0+')',sx(V0)+7,sy(p0)-4);
+
+  // Izotermă: p·V = const → p = p0*V0/V
+  ctx.strokeStyle='rgba(79,156,249,0.85)';ctx.lineWidth=2;
+  ctx.beginPath();
+  for(let v=0.5;v<=Vmax;v+=0.2){const p=p0*V0/v;if(p>pmax)continue;if(v===0.5)ctx.moveTo(sx(v),sy(p));else ctx.lineTo(sx(v),sy(p));}
+  ctx.stroke();
+  ctx.fillStyle='#4f9cf9';ctx.fillText('Izotermă',sx(V0*k*0.7),sy(p0*V0/(V0*k*0.7))-10);
+
+  // Izobară: p=const, V changes
+  const V2b=V0*k;
+  ctx.strokeStyle='rgba(245,158,11,0.85)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(sx(V0),sy(p0));ctx.lineTo(sx(V2b),sy(p0));ctx.stroke();
+  ctx.fillStyle='#f59e0b';ctx.fillText('Izobară',sx((V0+V2b)/2),sy(p0)-10);
+
+  // Izocoră: V=const, p changes
+  const p2c=p0*k;
+  ctx.strokeStyle='rgba(16,185,129,0.85)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(sx(V0),sy(p0));ctx.lineTo(sx(V0),sy(p2c));ctx.stroke();
+  ctx.fillStyle='#10b981';ctx.textAlign='right';ctx.fillText('Izocoră',sx(V0)-4,(sy(p0)+sy(p2c))/2);
+
+  // End points
+  ctx.fillStyle='#4f9cf9';ctx.beginPath();ctx.arc(sx(V0*k),sy(p0*V0/(V0*k)),4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.arc(sx(V2b),sy(p0),4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(sx(V0),sy(p2c),4,0,Math.PI*2);ctx.fill();
+}
+
+// ── CARNOT ──────────────────────────────────────────────────────────────────
+function updateCarnot(){
+  const T1=+document.getElementById('T1').value;
+  const T2=+document.getElementById('T2').value;
+  const Q1=+document.getElementById('Q1').value;
+  document.getElementById('T1v').textContent=T1+' K';
+  document.getElementById('T2v').textContent=T2+' K';
+  document.getElementById('Q1v').textContent=Q1+' J';
+  const eta=Math.max(0,1-T2/T1);
+  const L=eta*Q1;
+  const Q2=Q1-L;
+  document.getElementById('etav').innerHTML=(eta*100).toFixed(1)+'<span class="result-unit">%</span>';
+  document.getElementById('Lv').innerHTML=L.toFixed(0)+'<span class="result-unit">J</span>';
+  document.getElementById('Q2v').innerHTML=Q2.toFixed(0)+'<span class="result-unit">J</span>';
+  drawCarnot(T1,T2,eta,Q1,L,Q2);
+}
+
+function drawCarnot(T1,T2,eta,Q1,L,Q2){
+  const cv=document.getElementById('carnotC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=220*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=220;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const cx=W/2;
+  // Hot source
+  ctx.fillStyle='rgba(239,68,68,0.25)'; ctx.strokeStyle='rgba(239,68,68,0.6)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.roundRect(cx-80,8,160,44,6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#fca5a5'; ctx.font='11px Space Grotesk'; ctx.textAlign='center';
+  ctx.fillText('SURSĂ CALDĂ T₁='+T1+'K',cx,35);
+
+  // Cold sink
+  ctx.fillStyle='rgba(59,130,246,0.25)'; ctx.strokeStyle='rgba(59,130,246,0.6)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.roundRect(cx-80,H-52,160,44,6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#93c5fd'; ctx.font='11px Space Grotesk';
+  ctx.fillText('SURSĂ RECE T₂='+T2+'K',cx,H-25);
+
+  // Engine
+  ctx.fillStyle='rgba(245,158,11,0.2)'; ctx.strokeStyle='rgba(245,158,11,0.6)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.roundRect(cx-40,H/2-28,80,56,8); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#fcd34d'; ctx.font='12px Space Grotesk';
+  ctx.fillText('Motor',cx,H/2-8);
+  ctx.font='10px Space Grotesk'; ctx.fillStyle='#f59e0b';
+  ctx.fillText('η='+Math.round(eta*100)+'%',cx,H/2+12);
+
+  // Arrows Q1, L, Q2
+  ctx.strokeStyle='rgba(239,68,68,0.7)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx,52); ctx.lineTo(cx,H/2-28); ctx.stroke();
+  ctx.fillStyle='#ef4444'; ctx.beginPath(); ctx.moveTo(cx-5,H/2-36); ctx.lineTo(cx+5,H/2-36); ctx.lineTo(cx,H/2-28); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#fca5a5'; ctx.textAlign='right'; ctx.font='10px Space Grotesk';
+  ctx.fillText('Q₁='+Q1+'J',cx-6,100);
+
+  ctx.strokeStyle='rgba(16,185,129,0.7)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx+40,H/2); ctx.lineTo(W-10,H/2); ctx.stroke();
+  ctx.fillStyle='#10b981';
+  ctx.beginPath(); ctx.moveTo(W-18,H/2-5); ctx.lineTo(W-18,H/2+5); ctx.lineTo(W-8,H/2); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#6ee7b7'; ctx.textAlign='left'; ctx.font='10px Space Grotesk';
+  ctx.fillText('L='+L.toFixed(0)+'J',cx+44,H/2-4);
+
+  ctx.strokeStyle='rgba(59,130,246,0.7)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx,H/2+28); ctx.lineTo(cx,H-52); ctx.stroke();
+  ctx.fillStyle='#3b82f6';
+  ctx.beginPath(); ctx.moveTo(cx-5,H-60); ctx.lineTo(cx+5,H-60); ctx.lineTo(cx,H-52); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#93c5fd'; ctx.textAlign='right'; ctx.font='10px Space Grotesk';
+  ctx.fillText('Q₂='+Q2.toFixed(0)+'J',cx-6,H-80);
+}
+
+// ── TRANSFER CĂLDURĂ ─────────────────────────────────────────────────────────
+function updateHeat(){
+  const m=+document.getElementById('ms').value;
+  const t1=+document.getElementById('t1').value;
+  const t2=+document.getElementById('t2').value;
+  const c=+document.getElementById('material').value;
+  document.getElementById('msv').textContent=m+' kg';
+  document.getElementById('t1v').textContent=t1+' °C';
+  document.getElementById('t2v').textContent=t2+' °C';
+  const dT=t2-t1;
+  const Q=m*c*dT;
+  const P=Q/600;
+  document.getElementById('dTv').innerHTML=dT.toFixed(0)+'<span class="result-unit">°C</span>';
+  document.getElementById('Qv').innerHTML=(Q/1000).toFixed(2)+'<span class="result-unit">kJ</span>';
+  document.getElementById('Ppv').innerHTML=P.toFixed(0)+'<span class="result-unit">W</span>';
+  drawHeat(t1,t2,Q,dT);
+}
+
+function drawHeat(t1,t2,Q,dT){
+  const cv=document.getElementById('heatC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=220*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=220;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const pad=35, gW=W-pad-15, gH=H-pad-25;
+  const tMin=Math.min(t1,t2)-20, tMax=Math.max(t1,t2)+20;
+
+  function sx(x){return pad+x*gW;}
+  function sy(t){return H-pad-(t-tMin)/(tMax-tMin)*gH;}
+
+  // Grid
+  for(let i=0;i<=4;i++){
+    ctx.strokeStyle='rgba(26,111,168,0.1)';ctx.lineWidth=1;
+    const y=H-pad-(i/4)*gH;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+gW,y);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,H-pad);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad,H-pad);ctx.lineTo(pad+gW,H-pad);ctx.stroke();
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='center';
+  ctx.fillText('timp →',pad+gW/2,H-4);ctx.textAlign='right';ctx.fillText('T(°C)',pad-3,pad+8);
+
+  // Temperature curve
+  const grad=ctx.createLinearGradient(pad,0,pad+gW,0);
+  grad.addColorStop(0,dT>=0?'rgba(59,130,246,0.8)':'rgba(239,68,68,0.8)');
+  grad.addColorStop(1,dT>=0?'rgba(239,68,68,0.8)':'rgba(59,130,246,0.8)');
+  ctx.strokeStyle=grad; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(245,158,11,0.3)';ctx.shadowBlur=8;
+  ctx.beginPath();
+  for(let i=0;i<=100;i++){
+    const x=i/100;
+    const t=t1+(t2-t1)*(1-Math.exp(-5*x));
+    ctx.lineTo(sx(x),sy(t));
+  }
+  ctx.stroke(); ctx.shadowBlur=0;
+
+  // Start/end points
+  ctx.fillStyle='#4f9cf9';ctx.beginPath();ctx.arc(sx(0),sy(t1),5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(sx(1),sy(t2),5,0,Math.PI*2);ctx.fill();
+
+  // Labels
+  ctx.fillStyle='#93c5fd';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('t₁='+t1+'°C',pad+4,sy(t1)+(dT>=0?14:-6));
+  ctx.fillStyle='#fca5a5';
+  ctx.fillText('t₂='+t2+'°C',pad+gW-50,sy(t2)+(dT>=0?-6:14));
+  ctx.fillStyle='#fcd34d';ctx.textAlign='center';
+  ctx.fillText('ΔQ='+(Q/1000).toFixed(1)+'kJ',pad+gW/2,20);
+}
+
+window.addEventListener('load',()=>{ updateGas(); drawPV(); updateCarnot(); updateHeat(); });
+window.addEventListener('resize',()=>{ updateGas(); drawPV(); updateCarnot(); updateHeat(); });
+</script>
+</body>
+</html>

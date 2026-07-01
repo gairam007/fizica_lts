@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Magnetism — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h1>🧲 <em>Magnetism</em></h1>
+  <p>Câmpuri magnetice, forța Lorentz, inducție electromagnetică — magnetismul în toate formele sale</p>
+  <div class="pills" style="justify-content:center;margin-top:.8rem">
+    <span class="pill pill-blue">Câmp magnetic</span>
+    <span class="pill pill-green">Forța Lorentz</span>
+    <span class="pill pill-purple">Inducție EM</span>
+    <span class="pill pill-amber">Solenoid</span>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- CÂMP MAGNETIC -->
+  <div class="card" id="camp">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🧲</div>
+      <div><div class="card-title">Câmpul Magnetic — Linii de Câmp</div>
+      <div class="card-desc">Vizualizarea câmpului unui magnet bară și a unui solenoid</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Intensitatea câmpului B (mT)</span><strong id="Bv">50 mT</strong></div>
+          <input type="range" min="10" max="200" value="50" id="Bfield" oninput="drawMagnet()">
+        </div>
+        <div style="margin:.8rem 0">
+          <label style="font-size:.83rem;color:var(--muted)">Tip:</label>
+          <select id="magType" onchange="drawMagnet()" style="background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.35rem .6rem;font-family:'Space Grotesk',sans-serif;font-size:.83rem;margin-left:.5rem">
+            <option value="bar">Magnet bară</option>
+            <option value="solenoid">Solenoid</option>
+            <option value="wire">Fir infinit</option>
+          </select>
+        </div>
+        <div class="formula-box">B = μ₀·n·I &nbsp; (solenoid) &nbsp;|&nbsp; B = μ₀I/2πr &nbsp; (fir)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Câmp B</div><div class="result-value" id="Bval">—</div></div>
+          <div class="result-item"><div class="result-label">Flux Φ (S=1 cm²)</div><div class="result-value" id="PhiV">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="magnetC" height="240"></canvas></div>
+    </div>
+  </div>
+
+  <!-- FORȚA LORENTZ -->
+  <div class="card" id="lorentz">
+    <div class="card-header">
+      <div class="card-icon icon-green">⚡</div>
+      <div><div class="card-title">Forța Lorentz — Particulă în Câmp Magnetic</div>
+      <div class="card-desc">F = q·v·B·sin α — traiectoria circulară a particulei</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Sarcina q (nC)</span><strong id="qv">10 nC</strong></div>
+          <input type="range" min="1" max="100" value="10" id="qpart" oninput="updateLorentz()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Viteza v (km/s)</span><strong id="vpart">100 km/s</strong></div>
+          <input type="range" min="10" max="500" value="100" id="vpart" oninput="updateLorentz()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Câmp magnetic B (mT)</span><strong id="Bpart">50 mT</strong></div>
+          <input type="range" min="1" max="200" value="50" id="Bpart" oninput="updateLorentz()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Masa particulei m (×10⁻²⁷ kg)</span><strong id="mpart">10</strong></div>
+          <input type="range" min="1" max="50" value="10" id="mpart" oninput="updateLorentz()">
+        </div>
+        <div class="formula-box">r = m·v / (q·B) &nbsp;|&nbsp; T = 2πm / (q·B)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Forța F</div><div class="result-value" id="Fv">—</div></div>
+          <div class="result-item"><div class="result-label">Raza r</div><div class="result-value" id="rv">—</div></div>
+          <div class="result-item"><div class="result-label">Perioada T</div><div class="result-value" id="Tlorv">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="lorentzC" height="240"></canvas></div>
+    </div>
+  </div>
+
+  <!-- INDUCȚIE EM -->
+  <div class="card" id="inductie">
+    <div class="card-header">
+      <div class="card-icon icon-purple">🔄</div>
+      <div><div class="card-title">Inducție Electromagnetică — Legea lui Faraday</div>
+      <div class="card-desc">ε = −dΦ/dt — FEM indusă prin variația fluxului magnetic</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Câmp B (mT)</span><strong id="Bind">100 mT</strong></div>
+          <input type="range" min="10" max="500" value="100" id="Bind" oninput="updateFaraday()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Suprafața spirei A (cm²)</span><strong id="Aind">50 cm²</strong></div>
+          <input type="range" min="5" max="200" value="50" id="Aind" oninput="updateFaraday()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Viteza de rotație ω (rad/s)</span><strong id="wind">10 rad/s</strong></div>
+          <input type="range" min="1" max="100" value="10" id="wind" oninput="updateFaraday()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Număr spire N</span><strong id="Nind">50</strong></div>
+          <input type="range" min="1" max="500" value="50" id="Nind" oninput="updateFaraday()">
+        </div>
+        <div class="formula-box">ε = N·B·A·ω·sin(ωt) &nbsp;|&nbsp; ε_max = N·B·A·ω</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">FEM max εₘₐₓ</div><div class="result-value" id="emaxv">—</div></div>
+          <div class="result-item"><div class="result-label">Flux max Φₘₐₓ</div><div class="result-value" id="phimaxv">—</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="indBtn" onclick="toggleFaraday()">▶ Animează generatorul</button>
+        </div>
+      </div>
+      <div><canvas id="indC" height="240"></canvas></div>
+    </div>
+  </div>
+
+  <!-- AUTO-INDUCȚIE -->
+  <div class="card" id="autoinductie">
+    <div class="card-header">
+      <div class="card-icon icon-amber">🔁</div>
+      <div><div class="card-title">Auto-inducția — Bobina</div>
+      <div class="card-desc">ε = −L·dI/dt &nbsp;|&nbsp; W = ½·L·I²</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Inductanța L (mH)</span><strong id="Lv">100 mH</strong></div>
+          <input type="range" min="1" max="1000" value="100" id="Lcoil" oninput="updateCoil()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Curentul I (A)</span><strong id="Iv">5 A</strong></div>
+          <input type="range" min="1" max="50" value="5" id="Icoil" oninput="updateCoil()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Rata variaţiei dI/dt (A/s)</span><strong id="dIdtv">10 A/s</strong></div>
+          <input type="range" min="1" max="200" value="10" id="dIdt" oninput="updateCoil()">
+        </div>
+        <div class="formula-box">ε = −L·dI/dt &nbsp;|&nbsp; W = ½·L·I²</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">FEM autoinducție ε</div><div class="result-value" id="epsilonv">—</div></div>
+          <div class="result-item"><div class="result-label">Energie stocată W</div><div class="result-value" id="Wcoilv">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="coilC" height="240"></canvas></div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+<script>
+const mu0=4*Math.PI*1e-7;
+
+// ── CÂMP MAGNETIC ─────────────────────────────────────────────────────────────
+function drawMagnet(){
+  const B=+document.getElementById('Bfield').value/1000;
+  const type=document.getElementById('magType').value;
+  document.getElementById('Bv').textContent=Math.round(B*1000)+' mT';
+  document.getElementById('Bval').innerHTML=(B*1000).toFixed(0)+'<span class="result-unit">mT</span>';
+  document.getElementById('PhiV').innerHTML=(B*0.0001*1e6).toFixed(1)+'<span class="result-unit">μWb</span>';
+
+  const cv=document.getElementById('magnetC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=240*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=240;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2;
+
+  if(type==='bar'){
+    // Draw bar magnet
+    ctx.fillStyle='rgba(239,68,68,0.7)';ctx.strokeStyle='rgba(239,68,68,1)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.roundRect(cx-50,cy-14,50,28,4);ctx.fill();ctx.stroke();
+    ctx.fillStyle='rgba(59,130,246,0.7)';ctx.strokeStyle='rgba(59,130,246,1)';
+    ctx.beginPath();ctx.roundRect(cx,cy-14,50,28,4);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='bold 13px Space Grotesk';ctx.textAlign='center';
+    ctx.fillText('N',cx-25,cy+5);ctx.fillText('S',cx+25,cy+5);
+
+    // Field lines
+    for(let i=0;i<12;i++){
+      const angle=(i/12)*Math.PI*2;
+      ctx.strokeStyle=`rgba(124,58,237,${0.25+Math.abs(Math.cos(angle))*0.3})`;ctx.lineWidth=1;
+      ctx.beginPath();
+      let x=cx-50+Math.cos(angle)*14, y=cy+Math.sin(angle)*14;
+      ctx.moveTo(x,y);
+      for(let s=0;s<80;s++){
+        const dx1=x-(cx-50),dy1=y-cy,r1=Math.sqrt(dx1*dx1+dy1*dy1)||1;
+        const dx2=x-(cx+50),dy2=y-cy,r2=Math.sqrt(dx2*dx2+dy2*dy2)||1;
+        const fx=dx1/r1/r1/r1-dx2/r2/r2/r2;
+        const fy=dy1/r1/r1/r1-dy2/r2/r2/r2;
+        const fm=Math.sqrt(fx*fx+fy*fy)||1;
+        x+=fx/fm*4;y+=fy/fm*4;
+        if(x<5||x>W-5||y<5||y>H-5)break;
+        if(Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))<14)break;
+        ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+  } else if(type==='solenoid'){
+    // Solenoid coils
+    const sw=120,sh=40,sx=cx-sw/2,sy=cy-sh/2;
+    for(let i=0;i<8;i++){
+      const ex=sx+i*(sw/8);
+      ctx.strokeStyle=`rgba(245,158,11,${0.4+i*0.06})`;ctx.lineWidth=2;
+      ctx.beginPath();ctx.ellipse(ex+sw/16,cy,5,sh/2,0,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.strokeStyle='rgba(245,158,11,0.6)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(sx,cy-sh/2);ctx.lineTo(sx+sw,cy-sh/2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sx,cy+sh/2);ctx.lineTo(sx+sw,cy+sh/2);ctx.stroke();
+    // Field lines inside
+    for(let i=0;i<5;i++){
+      const ly=cy-sh/2+10+(i/4)*sh*0.8;
+      ctx.strokeStyle='rgba(79,156,249,0.6)';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(sx-40,ly);ctx.lineTo(sx+sw+40,ly);ctx.stroke();
+    }
+    ctx.fillStyle='#4f9cf9';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+    ctx.fillText('B uniform',sx+10,cy-sh/2-6);
+  } else {
+    // Wire
+    ctx.fillStyle='rgba(245,158,11,0.7)';ctx.strokeStyle='rgba(245,158,11,1)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(cx,cy,8,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='bold 12px Space Grotesk';ctx.textAlign='center';
+    ctx.fillText('I',cx,cy+4);
+    // Concentric circles
+    for(let i=1;i<=6;i++){
+      const r=i*22;
+      ctx.strokeStyle=`rgba(124,58,237,${0.6-i*0.08})`;ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+      // Direction arrow
+      const ax=cx+r,ay=cy;
+      ctx.fillStyle=`rgba(124,58,237,${0.6-i*0.08})`;
+      ctx.beginPath();ctx.moveTo(ax,ay-5);ctx.lineTo(ax,ay+5);ctx.lineTo(ax+7,ay);ctx.closePath();ctx.fill();
+    }
+    ctx.fillStyle='#a78bfa';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+    ctx.fillText('B=μ₀I/2πr',cx+15,cy-15);
+  }
+}
+
+// ── LORENTZ ──────────────────────────────────────────────────────────────────
+function updateLorentz(){
+  const q=+document.getElementById('qpart').value*1e-9;
+  const v=+document.getElementById('vpart').value*1e3;
+  const B=+document.getElementById('Bpart').value*1e-3;
+  const m=+document.getElementById('mpart').value*1e-27;
+  document.getElementById('qv').textContent=(q*1e9).toFixed(0)+' nC';
+  document.getElementById('vpart').nextSibling;
+  document.querySelectorAll('[id="vpart"]')[0].parentElement.querySelector('strong').textContent=(v/1e3).toFixed(0)+' km/s';
+  document.getElementById('Bpart').parentElement.querySelector('strong').textContent=(B*1e3).toFixed(0)+' mT';
+  document.getElementById('mpart').parentElement.querySelector('strong').textContent=(m/1e-27).toFixed(0);
+
+  const F=q*v*B;
+  const r=m*v/(q*B);
+  const T=2*Math.PI*m/(q*B);
+
+  document.getElementById('Fv').innerHTML=(F*1e9).toFixed(2)+'<span class="result-unit">nN</span>';
+  document.getElementById('rv').innerHTML=r.toFixed(3)+'<span class="result-unit">m</span>';
+  document.getElementById('Tlorv').innerHTML=(T*1e6).toFixed(2)+'<span class="result-unit">μs</span>';
+  drawLorentz(r);
+}
+function drawLorentz(rMeters){
+  const cv=document.getElementById('lorentzC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=240*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=240;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  // Background B field dots (into page)
+  for(let x=20;x<W;x+=25){for(let y=20;y<H;y+=25){
+    ctx.fillStyle='rgba(79,156,249,0.15)';
+    ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();
+  }}
+  ctx.fillStyle='rgba(79,156,249,0.4)';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('B ⊗ (intră în plan)',8,16);
+
+  // Circular trajectory
+  const rPx=Math.min(rMeters*800,H/2-20);
+  const cx=W/2, cy=H-30;
+  ctx.strokeStyle='rgba(16,185,129,0.8)';ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(16,185,129,0.4)';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.arc(cx,cy,rPx,Math.PI,0,false);ctx.stroke();ctx.shadowBlur=0;
+
+  // Particle
+  ctx.fillStyle='#f59e0b';ctx.shadowColor='rgba(245,158,11,0.5)';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.arc(cx+rPx,cy,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+  ctx.fillStyle='#fcd34d';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('+q',cx+rPx+10,cy+4);
+
+  // Velocity arrow (up)
+  ctx.strokeStyle='#f59e0b';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(cx+rPx,cy);ctx.lineTo(cx+rPx,cy-40);ctx.stroke();
+  ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.moveTo(cx+rPx-5,cy-38);ctx.lineTo(cx+rPx+5,cy-38);ctx.lineTo(cx+rPx,cy-50);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#fcd34d';ctx.font='10px Space Grotesk';ctx.textAlign='left';ctx.fillText('v',cx+rPx+6,cy-38);
+
+  // Force arrow (toward center)
+  ctx.strokeStyle='#ef4444';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(cx+rPx,cy);ctx.lineTo(cx+rPx-30,cy);ctx.stroke();
+  ctx.fillStyle='#ef4444';ctx.beginPath();ctx.moveTo(cx+rPx-35,cy-4);ctx.lineTo(cx+rPx-35,cy+4);ctx.lineTo(cx+rPx-28,cy);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#fca5a5';ctx.textAlign='center';ctx.fillText('F (Lorentz)',cx+rPx-20,cy-10);
+
+  ctx.fillStyle='#6ee7b7';ctx.textAlign='center';
+  ctx.fillText('r = '+rMeters.toFixed(3)+' m',cx,cy-rPx/2);
+}
+
+// ── INDUCȚIE ────────────────────────────────────────────────────────────────
+let indAnimId=null, indRunning=false, indT=0;
+
+function updateFaraday(){
+  const B=+document.getElementById('Bind').value*1e-3;
+  const A=+document.getElementById('Aind').value*1e-4;
+  const w=+document.getElementById('wind').value;
+  const N=+document.getElementById('Nind').value;
+  document.getElementById('Bind').parentElement.querySelector('strong').textContent=(B*1e3).toFixed(0)+' mT';
+  document.getElementById('Aind').parentElement.querySelector('strong').textContent=(A*1e4).toFixed(0)+' cm²';
+  document.getElementById('wind').parentElement.querySelector('strong').textContent=w+' rad/s';
+  document.getElementById('Nind').parentElement.querySelector('strong').textContent=N;
+  const emax=N*B*A*w;
+  const phimax=B*A;
+  document.getElementById('emaxv').innerHTML=(emax*1000).toFixed(2)+'<span class="result-unit">mV</span>';
+  document.getElementById('phimaxv').innerHTML=(phimax*1e6).toFixed(2)+'<span class="result-unit">μWb</span>';
+  drawFaraday(B,A,w,N,indT);
+}
+function drawFaraday(B,A,w,N,t){
+  const cv=document.getElementById('indC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=240*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=240;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const emax=N*B*A*w;
+  const Tperiod=w>0?2*Math.PI/w:1;
+  const tmax=2*Tperiod;
+  const pad=35,gW=W-pad-15,gH=H-pad-25;
+
+  // Grid
+  for(let i=0;i<=4;i++){ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=1;const y=H-pad-(i/4)*gH;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+gW,y);ctx.stroke();}
+  ctx.strokeStyle='rgba(26,111,168,0.15)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad,H/2);ctx.lineTo(pad+gW,H/2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,H-pad);ctx.stroke();
+
+  function sx(ti){return pad+(ti/tmax)*gW;}
+  function sy(e){return H/2-(e/emax)*gH/2.2;}
+
+  // FEM curve
+  const grad=ctx.createLinearGradient(pad,0,pad+gW,0);
+  grad.addColorStop(0,'rgba(167,139,250,0)');
+  grad.addColorStop(0.05,'rgba(167,139,250,0.8)');
+  grad.addColorStop(0.95,'rgba(79,156,249,0.8)');
+  grad.addColorStop(1,'rgba(79,156,249,0)');
+  ctx.strokeStyle=grad;ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(124,58,237,0.3)';ctx.shadowBlur=8;
+  ctx.beginPath();
+  for(let i=0;i<=200;i++){const ti=tmax*i/200;const e=emax*Math.sin(w*ti);if(i===0)ctx.moveTo(sx(ti),sy(e));else ctx.lineTo(sx(ti),sy(e));}
+  ctx.stroke();ctx.shadowBlur=0;
+
+  // Current time marker
+  if(t>0){
+    const e=emax*Math.sin(w*t);
+    const mx=sx(t%(tmax));
+    const my=sy(e);
+    ctx.fillStyle='#f59e0b';ctx.shadowColor='rgba(245,158,11,0.5)';ctx.shadowBlur=8;
+    ctx.beginPath();ctx.arc(mx,my,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    // Coil indicator (left side)
+    const angle=w*t;
+    const ccx=22,ccy=H/2;
+    ctx.strokeStyle='rgba(167,139,250,0.8)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(ccx,ccy,14,8*Math.abs(Math.cos(angle)),0,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle='#a78bfa';ctx.font='9px Space Grotesk';ctx.textAlign='center';
+    ctx.fillText('ε',ccx,H-8);
+  }
+
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('ε(t) [mV]',pad+2,pad+8);
+  ctx.textAlign='center';ctx.fillText('t →',pad+gW/2,H-4);
+  ctx.fillStyle='#c4b5fd';ctx.fillText('εₘₐₓ='+(emax*1000).toFixed(1)+'mV',pad+gW-40,pad+14);
+}
+
+function toggleFaraday(){
+  indRunning=!indRunning;
+  document.getElementById('indBtn').textContent=indRunning?'⏸ Pauză':'▶ Animează generatorul';
+  if(indRunning)animFaraday();else cancelAnimationFrame(indAnimId);
+}
+function animFaraday(){
+  const B=+document.getElementById('Bind').value*1e-3;
+  const A=+document.getElementById('Aind').value*1e-4;
+  const w=+document.getElementById('wind').value;
+  const N=+document.getElementById('Nind').value;
+  indT+=0.04;
+  drawFaraday(B,A,w,N,indT);
+  if(indRunning)indAnimId=requestAnimationFrame(animFaraday);
+}
+
+// ── AUTO-INDUCȚIE ─────────────────────────────────────────────────────────────
+function updateCoil(){
+  const L=+document.getElementById('Lcoil').value*1e-3;
+  const I=+document.getElementById('Icoil').value;
+  const dIdt=+document.getElementById('dIdt').value;
+  document.getElementById('Lv').textContent=(L*1000).toFixed(0)+' mH';
+  document.getElementById('Iv').textContent=I+' A';
+  document.getElementById('dIdtv').textContent=dIdt+' A/s';
+  const eps=L*dIdt;
+  const W2=0.5*L*I*I;
+  document.getElementById('epsilonv').innerHTML=(eps*1000).toFixed(2)+'<span class="result-unit">mV</span>';
+  document.getElementById('Wcoilv').innerHTML=(W2*1000).toFixed(3)+'<span class="result-unit">mJ</span>';
+  drawCoil(L,I,dIdt,eps,W2);
+}
+
+function drawCoil(L,I,dIdt,eps,W2){
+  const cv=document.getElementById('coilC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=240*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||300,H=240;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2;
+
+  // Draw coil
+  const nTurns=8, cw=120, ch=50;
+  const csx=cx-cw/2, csy=cy-ch/2;
+  for(let i=0;i<nTurns;i++){
+    const x=csx+i*(cw/nTurns);
+    const hue=200+i*15;
+    ctx.strokeStyle=`hsla(${hue},65%,55%,0.7)`;ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(x+cw/(2*nTurns),cy,cw/(2*nTurns),ch/2,0,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(124,58,237,0.5)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(csx,csy);ctx.lineTo(csx+cw,csy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(csx,csy+ch);ctx.lineTo(csx+cw,csy+ch);ctx.stroke();
+
+  // Field lines inside coil
+  const fieldStr=Math.min(I/10,1);
+  for(let i=0;i<5;i++){
+    const ly=csy+8+(i/4)*(ch-16);
+    ctx.strokeStyle=`rgba(79,156,249,${0.3+fieldStr*0.4})`;ctx.lineWidth=1.2;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(csx+10,ly);ctx.lineTo(csx+cw-10,ly);ctx.stroke();
+    ctx.setLineDash([]);
+    // Arrows
+    ctx.fillStyle=`rgba(79,156,249,${0.3+fieldStr*0.4})`;
+    ctx.beginPath();ctx.moveTo(csx+cw/2+15,ly-3);ctx.lineTo(csx+cw/2+15,ly+3);ctx.lineTo(csx+cw/2+20,ly);ctx.closePath();ctx.fill();
+  }
+
+  // Terminals & labels
+  ctx.fillStyle='rgba(245,158,11,0.8)';
+  ctx.beginPath();ctx.arc(csx-15,cy,6,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(csx+cw+15,cy,6,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(245,158,11,0.5)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(csx-15,cy);ctx.lineTo(csx,cy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(csx+cw,cy);ctx.lineTo(csx+cw+15,cy);ctx.stroke();
+
+  // Info
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='center';
+  ctx.fillText('L='+Math.round(L*1e3)+'mH  I='+I+'A',cx,csy-12);
+  ctx.fillStyle='#a78bfa';ctx.fillText('ε='+( eps*1000).toFixed(1)+'mV',cx,csy+ch+22);
+  ctx.fillStyle='#fcd34d';ctx.fillText('W='+( W2*1000).toFixed(2)+'mJ',cx,csy+ch+36);
+
+  // Energy bar
+  const maxW=0.5*(1000e-3)*(50*50);
+  const barW=(W2/maxW)*(W-60);
+  ctx.fillStyle='rgba(245,158,11,0.2)';ctx.fillRect(30,H-25,W-60,12);
+  ctx.fillStyle='rgba(245,158,11,0.7)';ctx.fillRect(30,H-25,Math.min(barW,W-60),12);
+  ctx.fillStyle='#2a5070';ctx.font='9px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('Energie magnetică',32,H-28);
+}
+
+// Fix slider label updates
+function fixSliders(){
+  document.querySelectorAll('input[type=range]').forEach(sl=>{
+    const str=sl.id;
+    sl.addEventListener('input',()=>{
+      const strong=sl.parentElement.querySelector('strong');
+    });
+  });
+}
+
+window.addEventListener('load',()=>{
+  drawMagnet();
+  // Initialize lorentz manually
+  document.getElementById('Fv').innerHTML='—';
+  document.getElementById('rv').innerHTML='—';
+  document.getElementById('Tlorv').innerHTML='—';
+  updateLorentz();
+  updateFaraday();
+  updateCoil();
+});
+window.addEventListener('resize',()=>{ drawMagnet(); updateLorentz(); updateFaraday(); updateCoil(); });
+
+// Re-wire slider strong labels for magnetism page
+document.querySelectorAll('.slider-group').forEach(g=>{
+  const sl=g.querySelector('input[type=range]');
+  const st=g.querySelector('strong');
+  if(sl&&st){
+    const orig=sl.oninput;
+    sl.addEventListener('input',()=>{ if(orig)orig.call(sl); });
+  }
+});
+</script>
+</body>
+</html>

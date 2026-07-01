@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Formule — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.search-bar{display:flex;gap:.6rem;margin-bottom:1.6rem;}
+.search-bar input{
+  flex:1;padding:.6rem 1rem;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg2);color:var(--text);font-family:'Space Grotesk',sans-serif;
+  font-size:.9rem;outline:none;transition:border-color .2s;
+}
+.search-bar input:focus{border-color:rgba(79,156,249,.5);}
+.search-bar input::placeholder{color:var(--muted);}
+
+.chapter{margin-bottom:2.5rem;}
+.chapter-header{
+  display:flex;align-items:center;gap:.7rem;
+  margin-bottom:1rem;cursor:pointer;user-select:none;
+}
+.chapter-header h2{font-size:1.1rem;font-weight:600;}
+.chapter-header .ch-icon{font-size:1.3rem;}
+.chapter-header .ch-toggle{margin-left:auto;font-size:.85rem;color:var(--muted);}
+.chapter-body{overflow:hidden;transition:max-height .3s ease;}
+
+.fz-table .fm-highlight{
+  background:rgba(26,111,168,.07);
+  border-left:2px solid var(--accent);
+}
+.fz-table td .copy-btn{
+  opacity:0;transition:opacity .15s;
+  background:none;border:none;color:var(--accent);
+  cursor:pointer;font-size:.75rem;padding:.1rem .3rem;
+  font-family:'Space Grotesk',sans-serif;
+}
+.fz-table tr:hover td .copy-btn{opacity:1;}
+
+.hidden-row{display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link" href="experimente.html">Experimente</a>
+    <a class="nav-link active" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>Formularul de <em>fizică</em></h1>
+  <p>Toate formulele pentru bacalaureat și olimpiadă — caută, copiează, studiază.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Caută o formulă sau mărime... (ex: energie, curent, refracție)" oninput="searchFormulas()">
+  </div>
+
+  <!-- MECANICĂ -->
+  <div class="chapter" data-chapter="mecanica">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <span class="ch-icon">🎯</span>
+      <h2>Mecanică</h2>
+      <span class="ch-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="card" style="padding:0.5rem 0">
+        <table class="fz-table">
+          <thead><tr><th>Mărime</th><th>Formula</th><th>Unitate</th><th>Capitol</th><th></th></tr></thead>
+          <tbody>
+            <tr class="fm-row"><td>Viteza medie</td><td class="fm">v̄ = Δx / Δt</td><td>m/s</td><td><span class="tag tag-blue">Cinematică</span></td><td><button class="copy-btn" onclick="copy('v = Δx / Δt')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Viteza în MRUA</td><td class="fm">v = v₀ + a·t</td><td>m/s</td><td><span class="tag tag-blue">Cinematică</span></td><td><button class="copy-btn" onclick="copy('v = v₀ + a·t')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Poziția în MRUA</td><td class="fm">x = x₀ + v₀·t + ½·a·t²</td><td>m</td><td><span class="tag tag-blue">Cinematică</span></td><td><button class="copy-btn" onclick="copy('x = x₀ + v₀·t + ½·a·t²')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Relație v–a–x</td><td class="fm">v² = v₀² + 2·a·Δx</td><td>—</td><td><span class="tag tag-blue">Cinematică</span></td><td><button class="copy-btn" onclick="copy('v² = v₀² + 2·a·Δx')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Accelerație centripetă</td><td class="fm">aᶜ = v²/r = ω²·r</td><td>m/s²</td><td><span class="tag tag-blue">Cinematică</span></td><td><button class="copy-btn" onclick="copy('aᶜ = v²/r')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Forța (Newton II)</td><td class="fm">F = m·a</td><td>N</td><td><span class="tag tag-green">Dinamică</span></td><td><button class="copy-btn" onclick="copy('F = m·a')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Greutatea</td><td class="fm">G = m·g</td><td>N</td><td><span class="tag tag-green">Dinamică</span></td><td><button class="copy-btn" onclick="copy('G = m·g')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Forța de frecare</td><td class="fm">Ff = μ·N</td><td>N</td><td><span class="tag tag-green">Dinamică</span></td><td><button class="copy-btn" onclick="copy('Ff = μ·N')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Forța centripetă</td><td class="fm">Fᶜ = m·v²/r</td><td>N</td><td><span class="tag tag-green">Dinamică</span></td><td><button class="copy-btn" onclick="copy('Fc = m·v²/r')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Forța gravitațională</td><td class="fm">F = G·m₁·m₂ / r²</td><td>N</td><td><span class="tag tag-green">Dinamică</span></td><td><button class="copy-btn" onclick="copy('F = G·m₁·m₂/r²')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Lucru mecanic</td><td class="fm">L = F·d·cos α</td><td>J</td><td><span class="tag tag-purple">Energie</span></td><td><button class="copy-btn" onclick="copy('L = F·d·cosα')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Putere mecanică</td><td class="fm">P = L/t = F·v</td><td>W</td><td><span class="tag tag-purple">Energie</span></td><td><button class="copy-btn" onclick="copy('P = F·v')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energie cinetică</td><td class="fm">Eₖ = ½·m·v²</td><td>J</td><td><span class="tag tag-purple">Energie</span></td><td><button class="copy-btn" onclick="copy('Eₖ = ½·m·v²')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energie potențială gravitațională</td><td class="fm">Eₚ = m·g·h</td><td>J</td><td><span class="tag tag-purple">Energie</span></td><td><button class="copy-btn" onclick="copy('Eₚ = m·g·h')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energie elastică</td><td class="fm">Eₑ = ½·k·x²</td><td>J</td><td><span class="tag tag-purple">Energie</span></td><td><button class="copy-btn" onclick="copy('Ee = ½·k·x²')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Impuls</td><td class="fm">p = m·v</td><td>kg·m/s</td><td><span class="tag tag-amber">Impuls</span></td><td><button class="copy-btn" onclick="copy('p = m·v')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Teorema impulsului</td><td class="fm">F·Δt = m·Δv</td><td>N·s</td><td><span class="tag tag-amber">Impuls</span></td><td><button class="copy-btn" onclick="copy('F·Δt = m·Δv')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Perioada pendulului</td><td class="fm">T = 2π√(L/g)</td><td>s</td><td><span class="tag tag-blue">Oscilații</span></td><td><button class="copy-btn" onclick="copy('T = 2π√(L/g)')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Constanta elastică Hooke</td><td class="fm">F = k·x</td><td>N</td><td><span class="tag tag-green">Dinamică</span></td><td><button class="copy-btn" onclick="copy('F = k·x')">copiază</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELECTRICITATE -->
+  <div class="chapter" data-chapter="electricitate">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <span class="ch-icon">⚡</span>
+      <h2>Electricitate</h2>
+      <span class="ch-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="card" style="padding:0.5rem 0">
+        <table class="fz-table">
+          <thead><tr><th>Mărime</th><th>Formula</th><th>Unitate</th><th>Capitol</th><th></th></tr></thead>
+          <tbody>
+            <tr class="fm-row"><td>Legea lui Ohm</td><td class="fm">U = R·I</td><td>V</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('U = R·I')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Intensitatea curentului</td><td class="fm">I = Q/t</td><td>A</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('I = Q/t')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Putere electrică</td><td class="fm">P = U·I = I²·R = U²/R</td><td>W</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('P = U·I')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energie electrică</td><td class="fm">W = P·t = U·I·t</td><td>J</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('W = P·t')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Rezistență serie</td><td class="fm">Rₜ = R₁ + R₂ + ...</td><td>Ω</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('Rt = R1+R2+...')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Rezistență paralel</td><td class="fm">1/Rₜ = 1/R₁ + 1/R₂ + ...</td><td>Ω</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('1/Rt = 1/R1+1/R2')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Rezistivitatea</td><td class="fm">R = ρ·l / A</td><td>Ω</td><td><span class="tag tag-amber">Circuite</span></td><td><button class="copy-btn" onclick="copy('R = ρ·l/A')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Legea lui Coulomb</td><td class="fm">F = k·q₁·q₂ / r²</td><td>N</td><td><span class="tag tag-red">Electrostatic.</span></td><td><button class="copy-btn" onclick="copy('F = k·q1·q2/r²')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Câmp electric</td><td class="fm">E = F/q = U/d</td><td>V/m</td><td><span class="tag tag-red">Electrostatic.</span></td><td><button class="copy-btn" onclick="copy('E = F/q')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Capacitate condensator</td><td class="fm">C = Q/U</td><td>F</td><td><span class="tag tag-purple">Condensator</span></td><td><button class="copy-btn" onclick="copy('C = Q/U')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energie condensator</td><td class="fm">W = ½·C·U²</td><td>J</td><td><span class="tag tag-purple">Condensator</span></td><td><button class="copy-btn" onclick="copy('W = ½·C·U²')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Constanta de timp RC</td><td class="fm">τ = R·C</td><td>s</td><td><span class="tag tag-purple">Condensator</span></td><td><button class="copy-btn" onclick="copy('τ = R·C')">copiază</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTICĂ -->
+  <div class="chapter" data-chapter="optica">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <span class="ch-icon">🌈</span>
+      <h2>Optică</h2>
+      <span class="ch-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="card" style="padding:0.5rem 0">
+        <table class="fz-table">
+          <thead><tr><th>Mărime</th><th>Formula</th><th>Unitate</th><th>Capitol</th><th></th></tr></thead>
+          <tbody>
+            <tr class="fm-row"><td>Legea lui Snell</td><td class="fm">n₁·sin θ₁ = n₂·sin θ₂</td><td>—</td><td><span class="tag tag-green">Refracție</span></td><td><button class="copy-btn" onclick="copy('n1·sinθ1 = n2·sinθ2')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Indice de refracție</td><td class="fm">n = c / v</td><td>—</td><td><span class="tag tag-green">Refracție</span></td><td><button class="copy-btn" onclick="copy('n = c/v')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Unghiul critic</td><td class="fm">sin θᶜ = n₂ / n₁</td><td>—</td><td><span class="tag tag-green">Refracție</span></td><td><button class="copy-btn" onclick="copy('sinθc = n2/n1')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Formula oglinzii / lentilei</td><td class="fm">1/f = 1/d₀ + 1/dᵢ</td><td>—</td><td><span class="tag tag-blue">Lentile</span></td><td><button class="copy-btn" onclick="copy('1/f = 1/d0 + 1/di')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Mărirea liniară</td><td class="fm">m = -dᵢ / d₀</td><td>—</td><td><span class="tag tag-blue">Lentile</span></td><td><button class="copy-btn" onclick="copy('m = -di/d0')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Puterea lentilei</td><td class="fm">D = 1/f</td><td>dioptrii</td><td><span class="tag tag-blue">Lentile</span></td><td><button class="copy-btn" onclick="copy('D = 1/f')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Viteza luminii</td><td class="fm">c = 3·10⁸ m/s</td><td>m/s</td><td><span class="tag tag-green">Constante</span></td><td><button class="copy-btn" onclick="copy('c = 3×10⁸ m/s')">copiază</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNDE -->
+  <div class="chapter" data-chapter="unde">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <span class="ch-icon">🌊</span>
+      <h2>Unde</h2>
+      <span class="ch-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="card" style="padding:0.5rem 0">
+        <table class="fz-table">
+          <thead><tr><th>Mărime</th><th>Formula</th><th>Unitate</th><th>Capitol</th><th></th></tr></thead>
+          <tbody>
+            <tr class="fm-row"><td>Viteza undei</td><td class="fm">v = λ·f</td><td>m/s</td><td><span class="tag tag-purple">Unde</span></td><td><button class="copy-btn" onclick="copy('v = λ·f')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Perioada</td><td class="fm">T = 1/f</td><td>s</td><td><span class="tag tag-purple">Unde</span></td><td><button class="copy-btn" onclick="copy('T = 1/f')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Pulsația</td><td class="fm">ω = 2π·f = 2π/T</td><td>rad/s</td><td><span class="tag tag-purple">Unde</span></td><td><button class="copy-btn" onclick="copy('ω = 2π·f')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Ecuația undei</td><td class="fm">y = A·sin(ωt - kx)</td><td>m</td><td><span class="tag tag-purple">Unde</span></td><td><button class="copy-btn" onclick="copy('y = A·sin(ωt - kx)')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Numărul de undă</td><td class="fm">k = 2π/λ</td><td>rad/m</td><td><span class="tag tag-purple">Unde</span></td><td><button class="copy-btn" onclick="copy('k = 2π/λ')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Efect Doppler (sursă în mișcare)</td><td class="fm">f' = f·v/(v ± vₛ)</td><td>Hz</td><td><span class="tag tag-blue">Doppler</span></td><td><button class="copy-btn" onclick="copy('f\' = f·v/(v±vs)')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Intensitate sonoră</td><td class="fm">L = 10·log(I/I₀) dB</td><td>dB</td><td><span class="tag tag-blue">Sunet</span></td><td><button class="copy-btn" onclick="copy('L = 10·log(I/I₀)')">copiază</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMODINAMICĂ -->
+  <div class="chapter" data-chapter="termodinamica">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <span class="ch-icon">🔥</span>
+      <h2>Termodinamică</h2>
+      <span class="ch-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="card" style="padding:0.5rem 0">
+        <table class="fz-table">
+          <thead><tr><th>Mărime</th><th>Formula</th><th>Unitate</th><th>Capitol</th><th></th></tr></thead>
+          <tbody>
+            <tr class="fm-row"><td>Legea gazelor ideale</td><td class="fm">pV = nRT</td><td>Pa·m³</td><td><span class="tag tag-red">Gaze</span></td><td><button class="copy-btn" onclick="copy('pV = nRT')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Legea lui Boyle (izotermă)</td><td class="fm">p₁V₁ = p₂V₂</td><td>—</td><td><span class="tag tag-red">Gaze</span></td><td><button class="copy-btn" onclick="copy('p1V1 = p2V2')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Legea lui Charles (izobară)</td><td class="fm">V₁/T₁ = V₂/T₂</td><td>—</td><td><span class="tag tag-red">Gaze</span></td><td><button class="copy-btn" onclick="copy('V1/T1 = V2/T2')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Legea lui Gay-Lussac (izocoră)</td><td class="fm">p₁/T₁ = p₂/T₂</td><td>—</td><td><span class="tag tag-red">Gaze</span></td><td><button class="copy-btn" onclick="copy('p1/T1 = p2/T2')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energia internă (gaz ideal monoatomic)</td><td class="fm">U = 3/2·nRT</td><td>J</td><td><span class="tag tag-amber">Termodin.</span></td><td><button class="copy-btn" onclick="copy('U = 3/2·nRT')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Primul principiu</td><td class="fm">ΔU = Q + L</td><td>J</td><td><span class="tag tag-amber">Termodin.</span></td><td><button class="copy-btn" onclick="copy('ΔU = Q + L')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Eficiența ciclului Carnot</td><td class="fm">η = 1 - T₂/T₁</td><td>—</td><td><span class="tag tag-amber">Carnot</span></td><td><button class="copy-btn" onclick="copy('η = 1 - T2/T1')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Căldura specifică</td><td class="fm">Q = m·c·ΔT</td><td>J</td><td><span class="tag tag-red">Căldură</span></td><td><button class="copy-btn" onclick="copy('Q = m·c·ΔT')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Conversia temperaturi</td><td class="fm">T(K) = t(°C) + 273.15</td><td>K</td><td><span class="tag tag-red">Căldură</span></td><td><button class="copy-btn" onclick="copy('T(K) = t(°C)+273.15')">copiază</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAGNETISM -->
+  <div class="chapter" data-chapter="magnetism">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <span class="ch-icon">🧲</span>
+      <h2>Magnetism</h2>
+      <span class="ch-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="card" style="padding:0.5rem 0">
+        <table class="fz-table">
+          <thead><tr><th>Mărime</th><th>Formula</th><th>Unitate</th><th>Capitol</th><th></th></tr></thead>
+          <tbody>
+            <tr class="fm-row"><td>Forța Lorentz</td><td class="fm">F = q·v·B·sin α</td><td>N</td><td><span class="tag tag-blue">Câmp B</span></td><td><button class="copy-btn" onclick="copy('F = q·v·B·sinα')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Forța pe conductor</td><td class="fm">F = I·l·B·sin α</td><td>N</td><td><span class="tag tag-blue">Câmp B</span></td><td><button class="copy-btn" onclick="copy('F = I·l·B·sinα')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Câmpul solenoidului</td><td class="fm">B = μ₀·n·I</td><td>T</td><td><span class="tag tag-blue">Câmp B</span></td><td><button class="copy-btn" onclick="copy('B = μ₀·n·I')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Câmpul firului infinit</td><td class="fm">B = μ₀·I / (2π·r)</td><td>T</td><td><span class="tag tag-blue">Câmp B</span></td><td><button class="copy-btn" onclick="copy('B = μ₀·I/(2π·r)')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Fluxul magnetic</td><td class="fm">Φ = B·A·cos α</td><td>Wb</td><td><span class="tag tag-purple">Inducție</span></td><td><button class="copy-btn" onclick="copy('Φ = B·A·cosα')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Legea lui Faraday</td><td class="fm">ε = -dΦ/dt</td><td>V</td><td><span class="tag tag-purple">Inducție</span></td><td><button class="copy-btn" onclick="copy('ε = -dΦ/dt')">copiază</button></td></tr>
+            <tr class="fm-row"><td>FEM auto-inducție</td><td class="fm">ε = -L·dI/dt</td><td>V</td><td><span class="tag tag-purple">Inducție</span></td><td><button class="copy-btn" onclick="copy('ε = -L·dI/dt')">copiază</button></td></tr>
+            <tr class="fm-row"><td>Energia bobinei</td><td class="fm">W = ½·L·I²</td><td>J</td><td><span class="tag tag-purple">Inducție</span></td><td><button class="copy-btn" onclick="copy('W = ½·L·I²')">copiază</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="no-results" style="display:none;text-align:center;padding:3rem;color:var(--muted)">
+    <div style="font-size:2.5rem;margin-bottom:.8rem">🔍</div>
+    <div>Nicio formulă găsită pentru "<span id="search-term"></span>"</div>
+  </div>
+
+</div>
+
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+
+<script>
+function toggleChapter(header){
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.ch-toggle');
+  const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+  body.style.maxHeight = open ? '0px' : body.scrollHeight + 'px';
+  toggle.textContent = open ? '▸' : '▾';
+}
+
+// Init all chapters open
+document.querySelectorAll('.chapter-body').forEach(b => {
+  b.style.maxHeight = b.scrollHeight + 'px';
+});
+
+function searchFormulas(){
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  document.getElementById('search-term').textContent = q;
+  let count = 0;
+  document.querySelectorAll('.fm-row').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    if(!q || text.includes(q)){
+      row.style.display='';
+      count++;
+    } else {
+      row.style.display='none';
+    }
+  });
+  // Expand chapters that have visible rows
+  document.querySelectorAll('.chapter').forEach(ch => {
+    const visible = ch.querySelectorAll('.fm-row:not([style*="display: none"])').length > 0;
+    const body = ch.querySelector('.chapter-body');
+    const toggle = ch.querySelector('.ch-toggle');
+    if(q){
+      body.style.maxHeight = visible ? '2000px' : '0px';
+      toggle.textContent = visible ? '▾' : '▸';
+    } else {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      toggle.textContent = '▾';
+    }
+  });
+  document.getElementById('no-results').style.display = (count === 0 && q) ? 'block' : 'none';
+}
+
+function copy(text){
+  navigator.clipboard.writeText(text).then(()=>{
+    // subtle feedback
+    const btn = event.target;
+    btn.textContent = '✓ copiat';
+    setTimeout(()=>btn.textContent='copiază', 1400);
+  });
+}
+</script>
+</body>
+</html>

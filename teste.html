@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Teste — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.topic-select{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin-bottom:2rem;}
+.ts-btn{
+  padding:1.1rem 1rem;border-radius:var(--radius);border:1px solid var(--border);
+  background:var(--card);cursor:pointer;text-align:center;transition:all .2s;
+  font-family:'Space Grotesk',sans-serif;color:var(--text);
+}
+.ts-btn:hover{border-color:rgba(79,156,249,.35);transform:translateY(-2px);}
+.ts-btn.selected{border-color:var(--accent);background:rgba(79,156,249,.1);}
+.ts-btn .ts-icon{font-size:1.6rem;display:block;margin-bottom:.4rem;}
+.ts-btn .ts-name{font-size:.875rem;font-weight:600;}
+.ts-btn .ts-count{font-size:.75rem;color:var(--muted);}
+
+.quiz-wrap{max-width:600px;margin:0 auto;}
+#quiz-screen{display:none;}
+#select-screen{}
+#end-screen{display:none;}
+
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+.quiz-info{font-size:.82rem;color:var(--muted);}
+.quiz-score-live{font-size:.82rem;color:var(--accent);font-weight:600;}
+
+.q-text{font-size:1.05rem;font-weight:500;line-height:1.55;margin-bottom:1.2rem;}
+
+.end-card{text-align:center;padding:2.5rem;}
+.score-ring{width:120px;height:120px;border-radius:50%;border:4px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;flex-direction:column;}
+.score-pct{font-size:2rem;font-weight:700;color:var(--accent);}
+.score-sub{font-size:.75rem;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link active" href="teste.html">Teste</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>Teste <em>adaptive</em></h1>
+  <p>Alege un capitol și testează-ți cunoștințele cu feedback imediat și explicații detaliate.</p>
+</div>
+
+<div class="wrap">
+<div class="quiz-wrap">
+
+  <!-- SELECT SCREEN -->
+  <div id="select-screen">
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Alege capitolul:</p>
+    <div class="topic-select">
+      <button class="ts-btn selected" data-topic="toate" onclick="selectTopic(this)">
+        <span class="ts-icon">🎓</span>
+        <div class="ts-name">Toate</div>
+        <div class="ts-count">48 întrebări</div>
+      </button>
+      <button class="ts-btn" data-topic="mecanica" onclick="selectTopic(this)">
+        <span class="ts-icon">🎯</span>
+        <div class="ts-name">Mecanică</div>
+        <div class="ts-count">10 întrebări</div>
+      </button>
+      <button class="ts-btn" data-topic="electricitate" onclick="selectTopic(this)">
+        <span class="ts-icon">⚡</span>
+        <div class="ts-name">Electricitate</div>
+        <div class="ts-count">8 întrebări</div>
+      </button>
+      <button class="ts-btn" data-topic="optica" onclick="selectTopic(this)">
+        <span class="ts-icon">🌈</span>
+        <div class="ts-name">Optică</div>
+        <div class="ts-count">6 întrebări</div>
+      </button>
+      <button class="ts-btn" data-topic="unde" onclick="selectTopic(this)">
+        <span class="ts-icon">🌊</span>
+        <div class="ts-name">Unde</div>
+        <div class="ts-count">6 întrebări</div>
+      </button>
+      <button class="ts-btn" data-topic="termodinamica" onclick="selectTopic(this)">
+        <span class="ts-icon">🔥</span>
+        <div class="ts-name">Termodinamică</div>
+        <div class="ts-count">8 întrebări</div>
+      </button>
+      <button class="ts-btn" data-topic="magnetism" onclick="selectTopic(this)">
+        <span class="ts-icon">🧲</span>
+        <div class="ts-name">Magnetism</div>
+        <div class="ts-count">10 întrebări</div>
+      </button>
+    </div>
+    <div class="btn-row" style="justify-content:center">
+      <button class="btn btn-primary" onclick="startQuiz()">▶ Începe testul</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="progress-bar"><div class="progress-fill" id="qprogress"></div></div>
+    <div class="quiz-header">
+      <span class="quiz-info" id="q-num">Întrebarea 1</span>
+      <span class="quiz-score-live" id="q-score-live">0 corecte</span>
+    </div>
+    <div class="card">
+      <div class="q-text" id="q-text"></div>
+      <div id="q-options"></div>
+      <div class="quiz-feedback" id="q-feedback"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="q-next" style="display:none" onclick="nextQ()">Următoarea →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="end-screen">
+    <div class="card end-card">
+      <div class="score-ring">
+        <div class="score-pct" id="end-pct"></div>
+        <div class="score-sub" id="end-raw"></div>
+      </div>
+      <div style="font-size:1.3rem;font-weight:700;margin-bottom:.4rem" id="end-msg"></div>
+      <div style="font-size:.875rem;color:var(--muted);margin-bottom:1.5rem" id="end-sub"></div>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn btn-primary" onclick="restartQ()">↺ Repetă</button>
+        <a class="btn btn-ghost" href="teste.html">← Alege alt capitol</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+
+<script>
+const ALL_QUESTIONS = [
+  // MECANICA
+  {t:'mecanica',q:'Un corp pornește din repaus cu a = 4 m/s². Ce distanță parcurge în 5 s?',opts:['50 m','25 m','100 m','20 m'],ans:0,exp:'d = ½·a·t² = ½·4·25 = 50 m ✓'},
+  {t:'mecanica',q:'Un corp de 10 kg e supus unei forțe de 50 N. Care e accelerația?',opts:['5 m/s²','0.2 m/s²','500 m/s²','50 m/s²'],ans:0,exp:'a = F/m = 50/10 = 5 m/s² ✓'},
+  {t:'mecanica',q:'Energia cinetică a unui corp de 2 kg cu v = 10 m/s este:',opts:['100 J','20 J','200 J','50 J'],ans:0,exp:'Eₖ = ½·m·v² = ½·2·100 = 100 J ✓'},
+  {t:'mecanica',q:'Un corp cade liber de la 80 m. Cât timp cade? (g = 10 m/s²)',opts:['4 s','8 s','40 s','2 s'],ans:0,exp:'t = √(2h/g) = √16 = 4 s ✓'},
+  {t:'mecanica',q:'Impulsul unui corp de 3 kg cu v = 6 m/s este:',opts:['18 kg·m/s','2 kg·m/s','9 kg·m/s','0.5 kg·m/s'],ans:0,exp:'p = m·v = 3·6 = 18 kg·m/s ✓'},
+  {t:'mecanica',q:'Care dintre afirmații descrie corect legea a III-a a lui Newton?',opts:['Acțiunea = -Reacțiunea','F = m·a','La echilibru F = 0','p = const.'],ans:0,exp:'Legea a III-a: forțele de acțiune și reacțiune sunt egale și de sens opus ✓'},
+  {t:'mecanica',q:'Un pendul de lungime L = 1 m are perioada: (g = 10 m/s²)',opts:['≈ 2 s','1 s','≈ 0.5 s','≈ 3 s'],ans:0,exp:'T = 2π√(L/g) = 2π·√0.1 ≈ 1.99 s ≈ 2 s ✓'},
+  {t:'mecanica',q:'Energia potențială a unui corp de 5 kg la h = 10 m este: (g = 10 m/s²)',opts:['500 J','50 J','5000 J','100 J'],ans:0,exp:'Eₚ = m·g·h = 5·10·10 = 500 J ✓'},
+  {t:'mecanica',q:'Care formulă descrie mișcarea uniformă?',opts:['x = v·t','x = ½·a·t²','v = a·t','F = m·a'],ans:0,exp:'Mișcarea uniformă: x = v·t (accelerație zero) ✓'},
+  {t:'mecanica',q:'Puterea unui motor care face 1000 J lucru în 5 s este:',opts:['200 W','5000 W','100 W','0.005 W'],ans:0,exp:'P = L/t = 1000/5 = 200 W ✓'},
+  // ELECTRICITATE
+  {t:'electricitate',q:'Legea lui Ohm spune că intensitatea curentului este:',opts:['I = U/R','I = U·R','I = R/U','I = U²/R'],ans:0,exp:'Legea lui Ohm: I = U/R ✓'},
+  {t:'electricitate',q:'Rezistența echivalentă a 2 rezistori de 10 Ω în paralel este:',opts:['5 Ω','20 Ω','10 Ω','0.2 Ω'],ans:0,exp:'1/R = 1/10+1/10 = 2/10 → R = 5 Ω ✓'},
+  {t:'electricitate',q:'Puterea disipată pe un rezistor de 4 Ω traversat de 2 A este:',opts:['16 W','8 W','2 W','32 W'],ans:0,exp:'P = I²·R = 4·4 = 16 W ✓'},
+  {t:'electricitate',q:'Capacitatea unui condensator care stochează 10 μC la 5 V este:',opts:['2 μF','50 μF','0.5 μF','10 μF'],ans:0,exp:'C = Q/U = 10μC/5V = 2 μF ✓'},
+  {t:'electricitate',q:'Constanta de timp a unui circuit RC cu R = 1 kΩ și C = 1 μF este:',opts:['1 ms','1 s','1 μs','10 ms'],ans:0,exp:'τ = R·C = 1000·0.000001 = 0.001 s = 1 ms ✓'},
+  {t:'electricitate',q:'Tensiunea la bornele a 3 rezistori de 10 Ω în serie la 30 V curent 1 A — pe fiecare rezistor:',opts:['10 V','30 V','3 V','15 V'],ans:0,exp:'În serie: U_total/n = 30/3 = 10 V pe fiecare ✓'},
+  {t:'electricitate',q:'Energia stocată într-un condensator de 2 μF la 100 V este:',opts:['0.01 J','0.1 J','0.02 J','2 J'],ans:0,exp:'W = ½·C·U² = ½·2×10⁻⁶·10000 = 0.01 J ✓'},
+  {t:'electricitate',q:'Legea lui Coulomb descrie forța dintre:',opts:['Două sarcini electrice','Două mase','Un câmp și o sarcină','Un curent și un câmp'],ans:0,exp:'Coulomb: F = k·q₁·q₂/r² — forța dintre sarcini electrice ✓'},
+  // OPTICĂ
+  {t:'optica',q:'Dacă n₁·sin θ₁ > n₂ la incidență din mediu mai dens, apare:',opts:['Reflexie totală internă','Difracție','Interferență','Dispersie'],ans:0,exp:'Când sin θ₂ > 1 → reflexie totală internă (sin θᶜ = n₂/n₁) ✓'},
+  {t:'optica',q:'Indicele de refracție al apei este ~1.33. Viteza luminii în apă este:',opts:['≈ 2.26×10⁸ m/s','3×10⁸ m/s','1.33×10⁸ m/s','1×10⁸ m/s'],ans:0,exp:'v = c/n = 3×10⁸/1.33 ≈ 2.26×10⁸ m/s ✓'},
+  {t:'optica',q:'Puterea unei lentile cu f = 25 cm este:',opts:['4 dioptrii','0.25 dioptrii','25 dioptrii','2 dioptrii'],ans:0,exp:'D = 1/f = 1/0.25 = 4 dioptrii ✓'},
+  {t:'optica',q:'Formula oglinzii/lentilei este:',opts:['1/f = 1/d₀ + 1/dᵢ','f = d₀ + dᵢ','f = d₀·dᵢ','1/d₀ = 1/dᵢ'],ans:0,exp:'Formula lentilei subțiri: 1/f = 1/d₀ + 1/dᵢ ✓'},
+  {t:'optica',q:'Un rege prismă descompune lumina albă deoarece n depinde de:',opts:['Lungimea de undă','Amplitudine','Intensitate','Polarizare'],ans:0,exp:'Dispersia: indicele n variază cu λ → descompunere în spectru ✓'},
+  {t:'optica',q:'Viteza luminii în vid este:',opts:['3×10⁸ m/s','3×10⁶ m/s','3×10¹⁰ m/s','3×10⁵ m/s'],ans:0,exp:'c = 3×10⁸ m/s (constanta fundamentală) ✓'},
+  // UNDE
+  {t:'unde',q:'O undă are f = 440 Hz și v = 340 m/s. Care e lungimea de undă?',opts:['≈ 0.77 m','0.77 cm','7.7 m','77 m'],ans:0,exp:'λ = v/f = 340/440 ≈ 0.77 m ✓'},
+  {t:'unde',q:'Perioada unei unde cu f = 50 Hz este:',opts:['0.02 s','50 s','0.2 s','2 s'],ans:0,exp:'T = 1/f = 1/50 = 0.02 s ✓'},
+  {t:'unde',q:'Efectul Doppler descrie:',opts:['Schimbarea frecvenței percepute cu mișcarea','Atenuarea undelor','Reflexia undelor','Viteza sunetului'],ans:0,exp:'Doppler: sursa sau receptorul în mișcare → frecvență percepută diferită ✓'},
+  {t:'unde',q:'Două unde cu aceeași amplitudine A și frecvență f în opoziție de fază produc:',opts:['Amplitudine zero (anulare)','Amplitudine 2A','Amplitudine A','Amplitudine √2·A'],ans:0,exp:'Interferență destructivă: dacă Δφ = π → anulare completă ✓'},
+  {t:'unde',q:'Pulsația ω a unei unde cu T = 0.5 s este:',opts:['4π rad/s','2π rad/s','π rad/s','8π rad/s'],ans:0,exp:'ω = 2π/T = 2π/0.5 = 4π rad/s ✓'},
+  {t:'unde',q:'Intensitatea sonoră se măsoară în:',opts:['decibeli (dB)','herți (Hz)','wați (W)','pasqali (Pa)'],ans:0,exp:'L = 10·log(I/I₀) — nivelul sonor se exprimă în decibeli ✓'},
+  // TERMODINAMICA
+  {t:'termodinamica',q:'Un gaz ideal la 300 K și 2 atm e comprimat la jumătate din volum (izotermă). Noua presiune:',opts:['4 atm','1 atm','3 atm','2 atm'],ans:0,exp:'Izotermă: p₁V₁ = p₂V₂ → p₂ = 2·2 = 4 atm ✓'},
+  {t:'termodinamica',q:'Conversia 100°C în kelvin:',opts:['373.15 K','100 K','273.15 K','173 K'],ans:0,exp:'T(K) = t(°C) + 273.15 = 100 + 273.15 = 373.15 K ✓'},
+  {t:'termodinamica',q:'Eficiența unui ciclu Carnot cu T₁ = 600 K și T₂ = 300 K este:',opts:['50%','25%','75%','100%'],ans:0,exp:'η = 1 - T₂/T₁ = 1 - 300/600 = 0.5 = 50% ✓'},
+  {t:'termodinamica',q:'Primul principiu al termodinamicii se scrie ca:',opts:['ΔU = Q + L','ΔU = Q - L','Q = L','L = -Q'],ans:0,exp:'ΔU = Q + L: variația energiei interne = căldura absorbită + lucrul primit ✓'},
+  {t:'termodinamica',q:'La o transformare izocorică (volum constant):',opts:['Lucrul mecanic e zero','Căldura e zero','Temperatura e constantă','Presiunea e constantă'],ans:0,exp:'Izocorică: V = const. → L = p·ΔV = 0 ✓'},
+  {t:'termodinamica',q:'Căldura absorbită pentru a crește 2 kg de apă de la 20°C la 70°C (c = 4186 J/kg·K):',opts:['418600 J','200 J','83720 J','4186 J'],ans:0,exp:'Q = m·c·ΔT = 2·4186·50 = 418600 J ✓'},
+  {t:'termodinamica',q:'La o transformare izotermă a gazului ideal, care mărime rămâne constantă?',opts:['Temperatura','Presiunea','Volumul','Entropia'],ans:0,exp:'Izotermă: T = const. (de aceea pV = const. — Boyle) ✓'},
+  {t:'termodinamica',q:'Legea lui Gay-Lussac se aplică la transformarea:',opts:['Izocorică','Izotermoă','Izobară','Adiabatică'],ans:0,exp:'Gay-Lussac: p/T = const. la volum constant (izocoră) ✓'},
+  // MAGNETISM
+  {t:'magnetism',q:'Forța Lorentz pe o sarcină q = 1 C cu v = 10 m/s în B = 2 T (perpendicular) este:',opts:['20 N','2 N','5 N','10 N'],ans:0,exp:'F = q·v·B·sin 90° = 1·10·2·1 = 20 N ✓'},
+  {t:'magnetism',q:'Legea lui Faraday spune că FEM indusă e proporțională cu:',opts:['Rata de variație a fluxului','Intensitatea curentului','Rezistența bobinei','Câmpul magnetic static'],ans:0,exp:'ε = -dΦ/dt — FEM indusă = derivata fluxului față de timp ✓'},
+  {t:'magnetism',q:'Fluxul magnetic printr-o suprafață de 0.5 m² în B = 3 T (normal la suprafață) este:',opts:['1.5 Wb','6 Wb','0.17 Wb','3 Wb'],ans:0,exp:'Φ = B·A·cos 0° = 3·0.5 = 1.5 Wb ✓'},
+  {t:'magnetism',q:'Energia stocată într-o bobină de L = 0.2 H la curent I = 3 A este:',opts:['0.9 J','1.8 J','0.1 J','6 J'],ans:0,exp:'W = ½·L·I² = ½·0.2·9 = 0.9 J ✓'},
+  {t:'magnetism',q:'Câmpul magnetic în interiorul unui solenoid este:',opts:['B = μ₀·n·I','B = μ₀·I/(2πr)','B = μ₀·I','B = I/n'],ans:0,exp:'Solenoid: B = μ₀·n·I (n = spire/metru) ✓'},
+  {t:'magnetism',q:'O particulă pozitivă se mișcă spre dreapta în câmp B îndreptat în sus. Forța Lorentz e:',opts:['Spre exterior (față de plan)','Spre interior','În jos','În sus'],ans:0,exp:'Regula mâinii drepte: v spre dreapta × B în sus → F spre exterior (din plan) ✓'},
+  {t:'magnetism',q:'Inducția magnetică a unui fir infinit la r = 0.1 m purtând I = 10 A este: (μ₀ = 4π×10⁻⁷)',opts:['20 μT','2 μT','200 μT','0.2 μT'],ans:0,exp:'B = μ₀·I/(2π·r) = 4π×10⁻⁷·10/(2π·0.1) = 20 μT ✓'},
+  {t:'magnetism',q:'Legea lui Lenz spune că curentul indus:',opts:['Se opune cauzei care l-a generat','Are același sens cu fluxul','Crește fluxul magnetic','Nu depinde de viteza variației'],ans:0,exp:'Lenz: curentul indus creează un câmp care se opune variației fluxului ✓'},
+  {t:'magnetism',q:'FEM de auto-inducție a unei bobine de L = 0.5 H când curentul variază cu 4 A/s:',opts:['2 V','8 V','0.125 V','0.5 V'],ans:0,exp:'ε = -L·dI/dt = 0.5·4 = 2 V ✓'},
+  {t:'magnetism',q:'Transformatorul mărește tensiunea de la 220 V la 440 V. Raportul n₂/n₁ este:',opts:['2','0.5','1','4'],ans:0,exp:'U₂/U₁ = n₂/n₁ → n₂/n₁ = 440/220 = 2 ✓'},
+];
+
+let activeTopic = 'toate';
+let questions = [];
+let qIndex = 0, score = 0, answered = false;
+
+function selectTopic(btn){
+  document.querySelectorAll('.ts-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  activeTopic = btn.dataset.topic;
+}
+
+function startQuiz(){
+  const pool = activeTopic === 'toate' ? ALL_QUESTIONS : ALL_QUESTIONS.filter(q=>q.t===activeTopic);
+  // shuffle
+  questions = [...pool].sort(()=>Math.random()-.5).slice(0, Math.min(pool.length, 10));
+  qIndex = 0; score = 0; answered = false;
+  document.getElementById('select-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('end-screen').style.display = 'none';
+  showQ();
+}
+
+function showQ(){
+  const q = questions[qIndex];
+  document.getElementById('q-num').textContent = `Întrebarea ${qIndex+1} din ${questions.length}`;
+  document.getElementById('q-score-live').textContent = `${score} corecte`;
+  document.getElementById('qprogress').style.width = (qIndex/questions.length*100)+'%';
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-next').style.display='none';
+  const fb = document.getElementById('q-feedback');
+  fb.className='quiz-feedback'; fb.textContent='';
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const d = document.createElement('div');
+    d.className='quiz-option';
+    d.textContent = String.fromCharCode(65+i)+'. '+opt;
+    d.onclick = ()=>pick(i,d);
+    opts.appendChild(d);
+  });
+  answered=false;
+}
+
+function pick(idx, el){
+  if(answered) return;
+  answered=true;
+  const q = questions[qIndex];
+  document.querySelectorAll('.quiz-option').forEach(o=>o.classList.add('disabled'));
+  const fb = document.getElementById('q-feedback');
+  if(idx===q.ans){
+    el.classList.add('correct'); score++;
+    fb.className='quiz-feedback show ok'; fb.textContent='✓ '+q.exp;
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-option')[q.ans].classList.add('correct');
+    fb.className='quiz-feedback show err'; fb.textContent='✗ Răspuns greșit. '+q.exp;
+  }
+  document.getElementById('q-score-live').textContent = `${score} corecte`;
+  document.getElementById('q-next').style.display='inline-flex';
+}
+
+function nextQ(){
+  qIndex++;
+  if(qIndex>=questions.length){
+    showEnd();
+  } else {
+    showQ();
+  }
+}
+
+function showEnd(){
+  document.getElementById('quiz-screen').style.display='none';
+  document.getElementById('end-screen').style.display='block';
+  const pct = Math.round(score/questions.length*100);
+  document.getElementById('end-pct').textContent = pct+'%';
+  document.getElementById('end-raw').textContent = score+'/'+questions.length;
+  let msg, sub;
+  if(pct>=90){msg='Excelent! 🏆';sub='Ai stăpânit materialul!';}
+  else if(pct>=70){msg='Bine! 👍';sub='Mai exersează puțin pentru perfecțiune.';}
+  else if(pct>=50){msg='Acceptabil 📚';sub='Revizuiește formulele și încearcă din nou.';}
+  else{msg='Mai mult studiu! 💪';sub='Parcurge experimentele și formulele înainte de retest.';}
+  document.getElementById('end-msg').textContent = msg;
+  document.getElementById('end-sub').textContent = sub;
+}
+
+function restartQ(){
+  document.getElementById('end-screen').style.display='none';
+  document.getElementById('select-screen').style.display='block';
+}
+</script>
+</body>
+</html>

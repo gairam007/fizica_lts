@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Unde — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h1>🌊 <em>Unde</em></h1>
+  <p>Unde mecanice, sonore, interferență și efectul Doppler — mișcare ondulatorie în toată splendoarea sa</p>
+  <div class="pills" style="justify-content:center;margin-top:.8rem">
+    <span class="pill pill-purple">Unde sinusoidale</span>
+    <span class="pill pill-blue">Interferență</span>
+    <span class="pill pill-amber">Efect Doppler</span>
+    <span class="pill pill-green">Unde staționare</span>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- UNDĂ SINUSOIDALĂ -->
+  <div class="card" id="sinusoida">
+    <div class="card-header">
+      <div class="card-icon icon-purple">〜</div>
+      <div><div class="card-title">Undă Sinusoidală</div>
+      <div class="card-desc">y(x,t) = A·sin(ωt − kx + φ) — animată în timp real</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Amplitudine A</span><strong id="av">1.0</strong></div>
+          <input type="range" min="10" max="100" value="50" id="amp" oninput="updateWave()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Frecvență f</span><strong id="fv">2.0 Hz</strong></div>
+          <input type="range" min="5" max="60" value="20" id="freq" oninput="updateWave()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Faza φ</span><strong id="phv">0°</strong></div>
+          <input type="range" min="0" max="360" value="0" id="phase" oninput="updateWave()">
+        </div>
+        <div class="formula-box">y = A·sin(2πft − kx + φ)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Perioadă T</div><div class="result-value" id="tv">—</div></div>
+          <div class="result-item"><div class="result-label">Lungime undă λ</div><div class="result-value" id="lv">—</div></div>
+          <div class="result-item"><div class="result-label">Energie ∝ A²</div><div class="result-value" id="ev">—</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="wavBtn" onclick="toggleWave()">▶ Animează</button>
+        </div>
+      </div>
+      <div><canvas id="waveC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- INTERFERENȚA -->
+  <div class="card" id="interferenta">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🎵</div>
+      <div><div class="card-title">Interferența Undelor — Superpoziție</div>
+      <div class="card-desc">Suma algebrică a două unde: constructivă sau destructivă</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Frecvența f₁</span><strong id="f1v">3.0 Hz</strong></div>
+          <input type="range" min="5" max="50" value="30" id="freq1" oninput="drawInterf()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Frecvența f₂</span><strong id="f2v">3.5 Hz</strong></div>
+          <input type="range" min="5" max="50" value="35" id="freq2" oninput="drawInterf()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Diferență de fază Δφ</span><strong id="dpv">0°</strong></div>
+          <input type="range" min="0" max="360" value="0" id="dphase" oninput="drawInterf()">
+        </div>
+        <div class="formula-box">y = y₁ + y₂ = A₁·sin(ω₁t) + A₂·sin(ω₂t+φ)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Tip interferență</div><div class="result-value" id="intv" style="font-size:.85rem">—</div></div>
+          <div class="result-item"><div class="result-label">Bătăi f</div><div class="result-value" id="beatv">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="interfC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- DOPPLER -->
+  <div class="card" id="doppler">
+    <div class="card-header">
+      <div class="card-icon icon-amber">📡</div>
+      <div><div class="card-title">Efectul Doppler</div>
+      <div class="card-desc">f' = f·v/(v ± vₛ) — schimbarea frecvenței percepute</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Frecvența sursei f₀</span><strong id="dFv">440 Hz</strong></div>
+          <input type="range" min="100" max="2000" value="440" id="dFreq" oninput="updateDoppler()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Viteza sursei vₛ</span><strong id="dVsv">50 m/s</strong></div>
+          <input type="range" min="0" max="330" value="50" id="dVs" oninput="updateDoppler()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Viteza sunetului v</span><strong id="dVv">340 m/s</strong></div>
+          <input type="range" min="300" max="400" value="340" id="dV" oninput="updateDoppler()">
+        </div>
+        <div class="formula-box">f' = f₀·v / (v − vₛ) &nbsp; [sursă spre receptor]</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">f' apropiindu-se</div><div class="result-value" id="dFap">—</div></div>
+          <div class="result-item"><div class="result-label">f' depărtându-se</div><div class="result-value" id="dFdep">—</div></div>
+          <div class="result-item"><div class="result-label">Δf</div><div class="result-value" id="dDf">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="doppC" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- UNDE STAȚIONARE -->
+  <div class="card" id="stationare">
+    <div class="card-header">
+      <div class="card-icon icon-green">〰️</div>
+      <div><div class="card-title">Unde Staționare — Rezonanță</div>
+      <div class="card-desc">Superpoziția undelor incidentă + reflectată pe o coardă</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Numărul de noduri n</span><strong id="nnv">2</strong></div>
+          <input type="range" min="1" max="6" value="2" id="nn" oninput="updateStanding()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Lungimea corzii L</span><strong id="Lv">1.0 m</strong></div>
+          <input type="range" min="50" max="200" value="100" id="strL" oninput="updateStanding()">
+        </div>
+        <div class="formula-box">λₙ = 2L/n &nbsp;|&nbsp; fₙ = n·v/(2L)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Lungime undă λₙ</div><div class="result-value" id="slv">—</div></div>
+          <div class="result-item"><div class="result-label">Frecvență armonică fₙ</div><div class="result-value" id="sfv">—</div></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="standBtn" onclick="toggleStanding()">▶ Animează</button>
+        </div>
+      </div>
+      <div><canvas id="standC" height="200"></canvas></div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+<script>
+// ── UNDĂ SINUSOIDALĂ ─────────────────────────────────────────────────────────
+let waveAnimId=null, waveRunning=false, waveOffset=0;
+
+function updateWave(){
+  const A=+document.getElementById('amp').value;
+  const f=+document.getElementById('freq').value/10;
+  const ph=+document.getElementById('phase').value;
+  document.getElementById('av').textContent=(A/50).toFixed(1);
+  document.getElementById('fv').textContent=f.toFixed(1)+' Hz';
+  document.getElementById('phv').textContent=ph+'°';
+  const T=1/f, lam=340/f, E=(A/50)*(A/50);
+  document.getElementById('tv').innerHTML=T.toFixed(2)+'<span class="result-unit">s</span>';
+  document.getElementById('lv').innerHTML=lam.toFixed(1)+'<span class="result-unit">m</span>';
+  document.getElementById('ev').innerHTML=E.toFixed(2)+'<span class="result-unit">u.r.</span>';
+  drawWaveStatic(A,f,ph,waveOffset);
+}
+
+function drawWaveStatic(A,f,ph,off){
+  const cv=document.getElementById('waveC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  for(let i=0;i<=4;i++){ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;const y=H/4*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.strokeStyle='rgba(26,111,168,0.12)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
+
+  const ap=A*0.7;
+  const grad=ctx.createLinearGradient(0,0,W,0);
+  grad.addColorStop(0,'rgba(124,58,237,0)');
+  grad.addColorStop(0.1,'rgba(124,58,237,0.9)');
+  grad.addColorStop(0.9,'rgba(79,156,249,0.9)');
+  grad.addColorStop(1,'rgba(79,156,249,0)');
+  ctx.strokeStyle=grad; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(124,58,237,0.4)'; ctx.shadowBlur=8;
+  ctx.beginPath();
+  for(let x=0;x<=W;x++){
+    const t=x/W;
+    const y=H/2-ap*Math.sin(2*Math.PI*f*t*4+ph*Math.PI/180+off);
+    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.shadowBlur=0;
+}
+
+function toggleWave(){
+  waveRunning=!waveRunning;
+  document.getElementById('wavBtn').textContent=waveRunning?'⏸ Pauză':'▶ Animează';
+  if(waveRunning)animWave();else cancelAnimationFrame(waveAnimId);
+}
+function animWave(){
+  const A=+document.getElementById('amp').value;
+  const f=+document.getElementById('freq').value/10;
+  const ph=+document.getElementById('phase').value;
+  waveOffset+=0.07;
+  drawWaveStatic(A,f,ph,waveOffset);
+  if(waveRunning)waveAnimId=requestAnimationFrame(animWave);
+}
+
+// ── INTERFERENȚĂ ─────────────────────────────────────────────────────────────
+function drawInterf(){
+  const f1=+document.getElementById('freq1').value/10;
+  const f2=+document.getElementById('freq2').value/10;
+  const dp=+document.getElementById('dphase').value;
+  document.getElementById('f1v').textContent=f1.toFixed(1)+' Hz';
+  document.getElementById('f2v').textContent=f2.toFixed(1)+' Hz';
+  document.getElementById('dpv').textContent=dp+'°';
+
+  const beat=Math.abs(f1-f2);
+  document.getElementById('beatv').innerHTML=beat.toFixed(1)+'<span class="result-unit">Hz</span>';
+  const dpr2=dp%360;
+  let tip='';
+  if(dpr2<20||dpr2>340)tip='Constructivă ✓';
+  else if(dpr2>160&&dpr2<200)tip='Destructivă ✗';
+  else tip='Parțială';
+  document.getElementById('intv').textContent=tip;
+
+  const cv=document.getElementById('interfC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(26,111,168,0.12)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
+
+  const draw=(freq,color,offsetY,label)=>{
+    ctx.strokeStyle=color;ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for(let x=0;x<=W;x++){
+      const t=x/W;
+      const y=offsetY-30*Math.sin(2*Math.PI*freq*t*4);
+      if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.fillStyle=color;ctx.font='10px Space Grotesk';ctx.textAlign='left';
+    ctx.fillText(label,4,offsetY-34);
+  };
+
+  draw(f1,'rgba(245,158,11,0.7)',H/4,'y₁ (f₁='+f1.toFixed(1)+'Hz)');
+  draw(f2,'rgba(167,139,250,0.7)',H/4*3,'y₂ (f₂='+f2.toFixed(1)+'Hz)');
+
+  // Resultant
+  const phRad=dp*Math.PI/180;
+  ctx.strokeStyle='rgba(79,156,249,1)';ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(79,156,249,0.4)';ctx.shadowBlur=8;
+  ctx.beginPath();
+  for(let x=0;x<=W;x++){
+    const t=x/W;
+    const y=H/2-25*(Math.sin(2*Math.PI*f1*t*4)+Math.sin(2*Math.PI*f2*t*4+phRad));
+    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();ctx.shadowBlur=0;
+  ctx.fillStyle='rgba(79,156,249,0.8)';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('y₁+y₂ (rezultantă)',4,H/2-56);
+}
+
+// ── DOPPLER ──────────────────────────────────────────────────────────────────
+function updateDoppler(){
+  const f0=+document.getElementById('dFreq').value;
+  const vs=+document.getElementById('dVs').value;
+  const v=+document.getElementById('dV').value;
+  document.getElementById('dFv').textContent=f0+' Hz';
+  document.getElementById('dVsv').textContent=vs+' m/s';
+  document.getElementById('dVv').textContent=v+' m/s';
+
+  const fApp=vs>=v?Infinity:f0*v/(v-vs);
+  const fDep=f0*v/(v+vs);
+  const df=isFinite(fApp)?fApp-fDep:999;
+
+  document.getElementById('dFap').innerHTML=(isFinite(fApp)?fApp.toFixed(0):'∞')+'<span class="result-unit">Hz</span>';
+  document.getElementById('dFdep').innerHTML=fDep.toFixed(0)+'<span class="result-unit">Hz</span>';
+  document.getElementById('dDf').innerHTML=(isFinite(df)?df.toFixed(0):'—')+'<span class="result-unit">Hz</span>';
+  drawDoppler(f0,vs,v,fApp,fDep);
+}
+
+function drawDoppler(f0,vs,v,fApp,fDep){
+  const cv=document.getElementById('doppC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const sx=W/2, sy=H/2;
+
+  // Source (moving right)
+  ctx.fillStyle='#f59e0b';ctx.shadowColor='rgba(245,158,11,0.5)';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.arc(sx,sy,14,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+  ctx.fillStyle='#fcd34d';ctx.font='10px Space Grotesk';ctx.textAlign='center';
+  ctx.fillText('vₛ='+vs+'m/s',sx,sy+28);
+
+  // Wavefronts (compressed ahead, expanded behind)
+  const ratio=vs/v;
+  for(let i=1;i<=5;i++){
+    const r=i*22;
+    const offX=ratio*r*0.6; // compression ahead
+    const cx=sx+offX;
+    ctx.strokeStyle=`rgba(79,156,249,${0.6-i*0.1})`;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(cx,sy,r-offX/2,0,Math.PI*2);ctx.stroke();
+  }
+
+  // Observers
+  const obsL=50, obsR=W-50;
+  ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(obsL,sy,10,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#a78bfa';ctx.beginPath();ctx.arc(obsR,sy,10,0,Math.PI*2);ctx.fill();
+
+  ctx.font='10px Space Grotesk';ctx.textAlign='center';
+  ctx.fillStyle='#6ee7b7';
+  ctx.fillText(isFinite(fApp)?fApp.toFixed(0)+' Hz':'∞',obsL,sy-18);
+  ctx.fillStyle='#c4b5fd';
+  ctx.fillText(fDep.toFixed(0)+' Hz',obsR,sy-18);
+  ctx.fillStyle='#2a5070';
+  ctx.fillText('Receptor 1',obsL,sy+22);ctx.fillText('Receptor 2',obsR,sy+22);
+  ctx.fillStyle='#2a5070';ctx.fillText('f₀='+f0+' Hz',sx,18);
+}
+
+// ── UNDE STAȚIONARE ──────────────────────────────────────────────────────────
+let standAnimId=null, standRunning=false, standT=0;
+
+function updateStanding(){
+  const n=+document.getElementById('nn').value;
+  const L=+document.getElementById('strL').value/100;
+  document.getElementById('nnv').textContent=n;
+  document.getElementById('Lv').textContent=L.toFixed(1)+' m';
+  const lam=2*L/n;
+  const fn=n*340/(2*L);
+  document.getElementById('slv').innerHTML=lam.toFixed(2)+'<span class="result-unit">m</span>';
+  document.getElementById('sfv').innerHTML=fn.toFixed(1)+'<span class="result-unit">Hz</span>';
+  drawStanding(n,standT);
+}
+
+function drawStanding(n,t){
+  const cv=document.getElementById('standC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||400,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const px=30, pw=W-60, cy=H/2;
+  ctx.strokeStyle='rgba(26,111,168,0.12)'; ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(px,cy);ctx.lineTo(px+pw,cy);ctx.stroke();
+
+  // Endpoints
+  ctx.fillStyle='rgba(255,255,255,0.3)';
+  ctx.beginPath();ctx.arc(px,cy,5,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(px+pw,cy,5,0,Math.PI*2);ctx.fill();
+
+  const amp=60*Math.cos(t);
+  // Incident wave
+  ctx.strokeStyle='rgba(79,156,249,0.35)'; ctx.lineWidth=1.5;
+  ctx.beginPath();
+  for(let x=0;x<=pw;x++){
+    const y=cy-30*Math.sin(n*Math.PI*x/pw-t);
+    if(x===0)ctx.moveTo(px+x,y);else ctx.lineTo(px+x,y);
+  }
+  ctx.stroke();
+  // Reflected wave
+  ctx.strokeStyle='rgba(167,139,250,0.35)'; ctx.lineWidth=1.5;
+  ctx.beginPath();
+  for(let x=0;x<=pw;x++){
+    const y=cy-30*Math.sin(n*Math.PI*x/pw+t);
+    if(x===0)ctx.moveTo(px+x,y);else ctx.lineTo(px+x,y);
+  }
+  ctx.stroke();
+  // Standing wave
+  ctx.strokeStyle='rgba(16,185,129,0.9)'; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(16,185,129,0.4)';ctx.shadowBlur=8;
+  ctx.beginPath();
+  for(let x=0;x<=pw;x++){
+    const y=cy-amp*Math.sin(n*Math.PI*x/pw);
+    if(x===0)ctx.moveTo(px+x,y);else ctx.lineTo(px+x,y);
+  }
+  ctx.stroke();ctx.shadowBlur=0;
+
+  // Nodes
+  ctx.fillStyle='rgba(239,68,68,0.8)';
+  for(let i=0;i<=n;i++){
+    const nx=px+i*(pw/n);
+    ctx.beginPath();ctx.arc(nx,cy,4,0,Math.PI*2);ctx.fill();
+  }
+
+  ctx.fillStyle='#2a5070';ctx.font='10px Space Grotesk';ctx.textAlign='left';
+  ctx.fillText('● Noduri (n='+n+')',px,H-8);
+}
+
+function toggleStanding(){
+  standRunning=!standRunning;
+  document.getElementById('standBtn').textContent=standRunning?'⏸ Pauză':'▶ Animează';
+  if(standRunning)animStand();else cancelAnimationFrame(standAnimId);
+}
+function animStand(){
+  const n=+document.getElementById('nn').value;
+  standT+=0.06;
+  drawStanding(n,standT);
+  if(standRunning)standAnimId=requestAnimationFrame(animStand);
+}
+
+window.addEventListener('load',()=>{ updateWave(); drawInterf(); updateDoppler(); updateStanding(); });
+window.addEventListener('resize',()=>{ updateWave(); drawInterf(); updateDoppler(); updateStanding(); });
+</script>
+</body>
+</html>

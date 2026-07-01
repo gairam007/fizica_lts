@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Optică — Fizica LTS</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link" href="index.html">Acasă</a>
+    <a class="nav-link active" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h1>🌈 <em>Optică</em></h1>
+  <p>Reflexie, refracție, lentile și dispersia luminii — lumina în toate formele sale</p>
+  <div class="pills" style="justify-content:center;margin-top:.8rem">
+    <span class="pill pill-green">Refracție</span>
+    <span class="pill pill-blue">Lentile</span>
+    <span class="pill pill-purple">Dispersie</span>
+    <span class="pill pill-amber">Reflexie</span>
+  </div>
+</div>
+<div class="wrap">
+
+  <!-- SNELL -->
+  <div class="card" id="snell">
+    <div class="card-header">
+      <div class="card-icon icon-green">🌊</div>
+      <div><div class="card-title">Legea lui Snell-Descartes</div>
+      <div class="card-desc">n₁·sin θ₁ = n₂·sin θ₂ — refracția și reflexia totală internă</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Unghi incident θ₁</span><strong id="a1v">45°</strong></div>
+          <input type="range" min="1" max="89" value="45" id="a1" oninput="updateSnell()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Indice n₁ (mediu 1)</span><strong id="n1v">1.00 — aer</strong></div>
+          <input type="range" min="100" max="260" value="100" id="n1" oninput="updateSnell()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Indice n₂ (mediu 2)</span><strong id="n2v">1.50 — sticlă</strong></div>
+          <input type="range" min="100" max="260" value="150" id="n2" oninput="updateSnell()">
+        </div>
+        <div class="formula-box">n₁·sin θ₁ = n₂·sin θ₂</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Unghi refractat θ₂</div><div class="result-value" id="a2v">—</div></div>
+          <div class="result-item"><div class="result-label">Unghi critic</div><div class="result-value" id="acv">—</div></div>
+          <div class="result-item"><div class="result-label">Fenomen</div><div class="result-value" id="fenv" style="font-size:.82rem">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="snellC" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <!-- LENTILE -->
+  <div class="card" id="lentile">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🔍</div>
+      <div><div class="card-title">Lentile Convergente — Formarea imaginii</div>
+      <div class="card-desc">1/f = 1/d₀ + 1/dᵢ — distanța obiectului față de lentilă</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Distanța focală f</span><strong id="fv">10 cm</strong></div>
+          <input type="range" min="5" max="40" value="10" id="flen" oninput="updateLens()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Distanța obiect d₀</span><strong id="d0v">25 cm</strong></div>
+          <input type="range" min="2" max="80" value="25" id="d0" oninput="updateLens()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Înălțime obiect h₀</span><strong id="h0v">3 cm</strong></div>
+          <input type="range" min="1" max="10" value="3" id="h0" oninput="updateLens()">
+        </div>
+        <div class="formula-box">1/f = 1/d₀ + 1/dᵢ &nbsp;|&nbsp; m = −dᵢ/d₀</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Distanța imagine dᵢ</div><div class="result-value" id="div">—</div></div>
+          <div class="result-item"><div class="result-label">Mărire m</div><div class="result-value" id="mv">—</div></div>
+          <div class="result-item"><div class="result-label">Tipul imaginii</div><div class="result-value" id="tipv" style="font-size:.8rem">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="lensC" height="240"></canvas></div>
+    </div>
+  </div>
+
+  <!-- PRISMA -->
+  <div class="card" id="prisma">
+    <div class="card-header">
+      <div class="card-icon icon-purple">🔺</div>
+      <div><div class="card-title">Prisma — Dispersia Luminii</div>
+      <div class="card-desc">Descompunerea luminii albe în spectrul vizibil</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Unghiul prismei A</span><strong id="prAv">60°</strong></div>
+          <input type="range" min="20" max="80" value="60" id="prA" oninput="drawPrisma()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Unghi incident</span><strong id="prIv">40°</strong></div>
+          <input type="range" min="10" max="80" value="40" id="prI" oninput="drawPrisma()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Indice mediu (n̄)</span><strong id="prNv">1.50</strong></div>
+          <input type="range" min="140" max="200" value="150" id="prN" oninput="drawPrisma()">
+        </div>
+        <div class="formula-box">δ = (n−1)·A &nbsp; (unghi de deviație)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Deviație medie δ</div><div class="result-value" id="devv">—</div></div>
+          <div class="result-item"><div class="result-label">Dispersie Δδ</div><div class="result-value" id="dispv">—</div></div>
+        </div>
+      </div>
+      <div><canvas id="prismaC" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <!-- OGLINZI -->
+  <div class="card" id="oglinzi">
+    <div class="card-header">
+      <div class="card-icon icon-amber">🪞</div>
+      <div><div class="card-title">Oglinda Plană — Reflexia</div>
+      <div class="card-desc">Unghi de incidență = unghi de reflexie</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Unghi de incidență θᵢ</span><strong id="tiv">35°</strong></div>
+          <input type="range" min="1" max="89" value="35" id="ti" oninput="drawMirror()">
+        </div>
+        <div class="formula-box">θᵢ = θᵣ &nbsp; (legea reflexiei)</div>
+        <div class="result-box">
+          <div class="result-item"><div class="result-label">Unghi reflexie θᵣ</div><div class="result-value" id="trv">35°</div></div>
+          <div class="result-item"><div class="result-label">Unghi față de suprafață</div><div class="result-value" id="tsv">55°</div></div>
+        </div>
+      </div>
+      <div><canvas id="mirrorC" height="200"></canvas></div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+<script>
+// ── SNELL ─────────────────────────────────────────────────────────────────────
+function medName(n){
+  if(n<=1.01)return'aer';
+  if(n<=1.35)return'apă';
+  if(n<=1.55)return'sticlă';
+  if(n<=1.65)return'cuarț';
+  if(n<=2.00)return'diamant';
+  return'cristal';
+}
+
+function updateSnell(){
+  const a1=+document.getElementById('a1').value;
+  const n1=document.getElementById('n1').value/100;
+  const n2=document.getElementById('n2').value/100;
+  document.getElementById('a1v').textContent=a1+'°';
+  document.getElementById('n1v').textContent=n1.toFixed(2)+' — '+medName(n1);
+  document.getElementById('n2v').textContent=n2.toFixed(2)+' — '+medName(n2);
+
+  const sinA2=n1*Math.sin(a1*Math.PI/180)/n2;
+  const ac=n2<n1?Math.asin(n2/n1)*180/Math.PI:null;
+  document.getElementById('acv').innerHTML=ac?ac.toFixed(1)+'<span class="result-unit">°</span>':'N/A';
+
+  if(sinA2>1){
+    document.getElementById('a2v').textContent='N/A';
+    document.getElementById('fenv').innerHTML='<span style="color:#ef4444">Reflexie totală internă!</span>';
+  } else {
+    const a2=Math.asin(sinA2)*180/Math.PI;
+    document.getElementById('a2v').innerHTML=a2.toFixed(1)+'<span class="result-unit">°</span>';
+    document.getElementById('fenv').innerHTML='<span style="color:#10b981">Refracție normală</span>';
+  }
+  drawSnell(a1,n1,n2);
+}
+
+function drawSnell(a1,n1,n2){
+  const cv=document.getElementById('snellC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=260*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||320,H=260;
+
+  // Backgrounds
+  ctx.fillStyle='rgba(59,130,246,0.07)'; ctx.fillRect(0,0,W,H/2);
+  ctx.fillStyle='rgba(79,156,249,0.14)'; ctx.fillRect(0,H/2,W,H/2);
+
+  // Interface
+  ctx.strokeStyle='rgba(26,111,168,0.2)'; ctx.lineWidth=1; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Normal line
+  ctx.strokeStyle='rgba(26,111,168,0.12)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(W/2,8); ctx.lineTo(W/2,H-8); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const cx=W/2, cy=H/2, len=100;
+  const rad1=(90-a1)*Math.PI/180;
+
+  // Incident ray
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(245,158,11,0.5)'; ctx.shadowBlur=10;
+  ctx.beginPath();
+  ctx.moveTo(cx-Math.cos(rad1)*len, cy-Math.sin(rad1)*len);
+  ctx.lineTo(cx,cy); ctx.stroke(); ctx.shadowBlur=0;
+
+  const sinA2=n1*Math.sin(a1*Math.PI/180)/n2;
+  if(sinA2<=1){
+    const a2=Math.asin(sinA2);
+    ctx.strokeStyle='#4f9cf9'; ctx.lineWidth=2.5;
+    ctx.shadowColor='rgba(79,156,249,0.5)'; ctx.shadowBlur=10;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.sin(a2)*len, cy+Math.cos(a2)*len);
+    ctx.stroke(); ctx.shadowBlur=0;
+
+    // Angle arcs
+    ctx.strokeStyle='rgba(245,158,11,0.4)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,32,-Math.PI/2-(a1*Math.PI/180),-Math.PI/2); ctx.stroke();
+    ctx.strokeStyle='rgba(79,156,249,0.4)';
+    ctx.beginPath(); ctx.arc(cx,cy,32,Math.PI/2,Math.PI/2+a2); ctx.stroke();
+
+    ctx.fillStyle='#fcd34d'; ctx.font='11px Space Grotesk'; ctx.textAlign='left';
+    ctx.fillText('θ₁='+a1+'°',cx-80,cy-14);
+    ctx.fillStyle='#93c5fd'; ctx.textAlign='left';
+    ctx.fillText('θ₂='+(a2*180/Math.PI).toFixed(1)+'°',cx+8,cy+24);
+  } else {
+    // Total internal reflection
+    ctx.strokeStyle='#ef4444'; ctx.lineWidth=2.5;
+    ctx.shadowColor='rgba(239,68,68,0.5)'; ctx.shadowBlur=10;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    const refRad=(90-(a1))*Math.PI/180;
+    ctx.lineTo(cx+Math.cos(refRad)*len, cy-Math.sin(refRad)*len);
+    ctx.stroke(); ctx.shadowBlur=0;
+    ctx.fillStyle='#fca5a5'; ctx.font='11px Space Grotesk'; ctx.textAlign='center';
+    ctx.fillText('Reflexie totală!',cx,cy-40);
+  }
+
+  // Labels
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px Space Grotesk'; ctx.textAlign='left';
+  ctx.fillText('n₁='+n1.toFixed(2)+' ('+medName(n1)+')',8,18);
+  ctx.fillText('n₂='+n2.toFixed(2)+' ('+medName(n2)+')',8,H-10);
+}
+
+// ── LENTILE ────────────────────────────────────────────────────────────────────
+function updateLens(){
+  const f=+document.getElementById('flen').value;
+  const d0=+document.getElementById('d0').value;
+  const h0=+document.getElementById('h0').value;
+  document.getElementById('fv').textContent=f+' cm';
+  document.getElementById('d0v').textContent=d0+' cm';
+  document.getElementById('h0v').textContent=h0+' cm';
+
+  const di=1/(1/f-1/d0);
+  const m=-di/d0;
+  const hi=m*h0;
+
+  document.getElementById('div').innerHTML=di.toFixed(1)+'<span class="result-unit">cm</span>';
+  document.getElementById('mv').innerHTML=m.toFixed(2)+'×';
+
+  let tip='';
+  if(di>0) tip=Math.abs(m)<1?'Reală, micșorată':'Reală, mărită';
+  else tip='Virtuală, mărită';
+  if(d0===f) tip='La infinit';
+  document.getElementById('tipv').textContent=tip;
+  drawLens(f,d0,h0,di,hi,m);
+}
+
+function drawLens(f,d0,h0,di,hi,m){
+  const cv=document.getElementById('lensC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=240*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||320,H=240;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2;
+  const scale=Math.min((W-60)/((d0+Math.abs(di)+20)), 4);
+
+  // Optical axis
+  ctx.strokeStyle='rgba(26,111,168,0.15)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(10,cy); ctx.lineTo(W-10,cy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Lens
+  ctx.strokeStyle='rgba(79,156,249,0.7)'; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(cx,cy-80); ctx.lineTo(cx,cy+80); ctx.stroke();
+  // Lens arrows
+  ctx.fillStyle='rgba(79,156,249,0.7)';
+  ctx.beginPath(); ctx.moveTo(cx-6,cy-80); ctx.lineTo(cx+6,cy-80); ctx.lineTo(cx,cy-92); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx-6,cy+80); ctx.lineTo(cx+6,cy+80); ctx.lineTo(cx,cy+92); ctx.closePath(); ctx.fill();
+
+  // Focal points
+  const fp=f*scale;
+  ctx.fillStyle='rgba(79,156,249,0.5)';
+  ctx.beginPath(); ctx.arc(cx+fp,cy,4,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx-fp,cy,4,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#2a5070'; ctx.font='10px Space Grotesk'; ctx.textAlign='center';
+  ctx.fillText('F',cx+fp,cy+14); ctx.fillText('F',cx-fp,cy+14);
+
+  // Object
+  const ox=cx-d0*scale;
+  const oh=h0*scale;
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2;
+  ctx.shadowColor='rgba(245,158,11,0.4)'; ctx.shadowBlur=6;
+  ctx.beginPath(); ctx.moveTo(ox,cy); ctx.lineTo(ox,cy-oh); ctx.stroke();
+  ctx.fillStyle='#f59e0b';
+  ctx.beginPath(); ctx.moveTo(ox-5,cy-oh); ctx.lineTo(ox+5,cy-oh); ctx.lineTo(ox,cy-oh-8); ctx.closePath(); ctx.fill();
+  ctx.shadowBlur=0;
+
+  // Image
+  if(isFinite(di)&&di!==0){
+    const ix=cx+di*scale;
+    const ih=hi*scale;
+    ctx.strokeStyle=di>0?'rgba(16,185,129,0.8)':'rgba(167,139,250,0.8)';
+    ctx.lineWidth=2; ctx.setLineDash(di>0?[]:[5,4]);
+    ctx.beginPath(); ctx.moveTo(ix,cy); ctx.lineTo(ix,cy-ih); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=di>0?'#10b981':'#a78bfa';
+    if(di>0){
+      ctx.beginPath(); ctx.moveTo(ix-5,cy-ih); ctx.lineTo(ix+5,cy-ih); ctx.lineTo(ix,cy-ih-8); ctx.closePath(); ctx.fill();
+    }
+  }
+
+  // Ray 1: parallel to axis → through F'
+  ctx.strokeStyle='rgba(239,68,68,0.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(ox,cy-oh); ctx.lineTo(cx,cy-oh); ctx.lineTo(cx+(W-cx-10),cy-oh+(cx+(W-cx-10)-cx)*(oh/(f*scale))); ctx.stroke();
+
+  // Ray 2: through center (no refraction)
+  ctx.strokeStyle='rgba(16,185,129,0.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(ox,cy-oh); ctx.lineTo(W-10,cy-oh*((W-10-ox)/(cx-ox)*(-1))); ctx.stroke();
+}
+
+// ── PRISMA ────────────────────────────────────────────────────────────────────
+function drawPrisma(){
+  const A=+document.getElementById('prA').value;
+  const inc=+document.getElementById('prI').value;
+  const n=document.getElementById('prN').value/100;
+  document.getElementById('prAv').textContent=A+'°';
+  document.getElementById('prIv').textContent=inc+'°';
+  document.getElementById('prNv').textContent=n.toFixed(2);
+
+  const dev=(n-1)*A;
+  const disp=0.02*A; // simplified dispersion
+  document.getElementById('devv').innerHTML=dev.toFixed(1)+'<span class="result-unit">°</span>';
+  document.getElementById('dispv').innerHTML=disp.toFixed(1)+'<span class="result-unit">°</span>';
+
+  const cv=document.getElementById('prismaC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=260*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||320,H=260;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  // Prism
+  const px=W/2, py=40, pw=140, ph=160;
+  ctx.fillStyle='rgba(79,156,249,0.08)';
+  ctx.strokeStyle='rgba(79,156,249,0.5)'; ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(px,py); ctx.lineTo(px-pw/2,py+ph); ctx.lineTo(px+pw/2,py+ph); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+
+  // Incoming white ray
+  ctx.strokeStyle='rgba(255,255,255,0.8)'; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(255,255,255,0.3)'; ctx.shadowBlur=6;
+  ctx.beginPath(); ctx.moveTo(20,py+ph/2-20); ctx.lineTo(px-pw/4,py+ph*.6); ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // Dispersed spectrum
+  const colors=['#ef4444','#f97316','#f59e0b','#22c55e','#3b82f6','#6366f1','#8b5cf6'];
+  colors.forEach((col,i)=>{
+    const spread=(i-3)*4;
+    const ex=px+pw/2+60+i*5;
+    const ey=py+ph*.6+40+spread;
+    ctx.strokeStyle=col; ctx.lineWidth=1.8;
+    ctx.shadowColor=col+'80'; ctx.shadowBlur=5;
+    ctx.beginPath(); ctx.moveTo(px-pw/4,py+ph*.6); ctx.lineTo(ex,ey); ctx.stroke();
+    ctx.shadowBlur=0;
+  });
+
+  ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.font='10px Space Grotesk'; ctx.textAlign='center';
+  ctx.fillText('A='+A+'°',px,py+ph*.45);
+  ctx.fillText('Lumină albă',40,py+ph/2-30);
+  ctx.fillText('Spectru vizibil',W-50,py+ph*.5);
+}
+
+// ── OGLINDĂ ────────────────────────────────────────────────────────────────────
+function drawMirror(){
+  const ti=+document.getElementById('ti').value;
+  document.getElementById('tiv').textContent=ti+'°';
+  document.getElementById('trv').textContent=ti+'°';
+  document.getElementById('tsv').textContent=(90-ti)+'°';
+
+  const cv=document.getElementById('mirrorC');
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr; cv.height=200*dpr; ctx.scale(dpr,dpr);
+  const W=cv.offsetWidth||320,H=200;
+  ctx.fillStyle='#b5d5ec'; ctx.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H-30, len=130;
+
+  // Mirror surface
+  ctx.strokeStyle='rgba(26,111,168,0.35)'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(30,cy); ctx.lineTo(W-30,cy); ctx.stroke();
+  // Mirror hatching
+  for(let x=40;x<W-30;x+=14){
+    ctx.strokeStyle='rgba(26,111,168,0.15)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x,cy); ctx.lineTo(x-8,cy+12); ctx.stroke();
+  }
+
+  // Normal
+  ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=1; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(cx,cy-140); ctx.lineTo(cx,cy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Incident ray
+  const radI=(90-ti)*Math.PI/180;
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(245,158,11,0.5)'; ctx.shadowBlur=10;
+  ctx.beginPath();
+  ctx.moveTo(cx-Math.sin(radI)*len, cy-Math.cos(radI)*len);
+  ctx.lineTo(cx,cy); ctx.stroke(); ctx.shadowBlur=0;
+
+  // Reflected ray
+  ctx.strokeStyle='#4f9cf9'; ctx.lineWidth=2.5;
+  ctx.shadowColor='rgba(79,156,249,0.5)'; ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.sin(radI)*len, cy-Math.cos(radI)*len);
+  ctx.stroke(); ctx.shadowBlur=0;
+
+  // Arcs
+  ctx.strokeStyle='rgba(245,158,11,0.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(cx,cy,40,Math.PI+radI,Math.PI*3/2); ctx.stroke();
+  ctx.strokeStyle='rgba(79,156,249,0.4)';
+  ctx.beginPath(); ctx.arc(cx,cy,40,-Math.PI/2,-Math.PI/2+radI); ctx.stroke();
+
+  ctx.fillStyle='#fcd34d'; ctx.font='11px Space Grotesk'; ctx.textAlign='right';
+  ctx.fillText('θᵢ='+ti+'°',cx-12,cy-50);
+  ctx.fillStyle='#93c5fd'; ctx.textAlign='left';
+  ctx.fillText('θᵣ='+ti+'°',cx+12,cy-50);
+}
+
+window.addEventListener('load',()=>{ updateSnell(); updateLens(); drawPrisma(); drawMirror(); });
+window.addEventListener('resize',()=>{ updateSnell(); updateLens(); drawPrisma(); drawMirror(); });
+</script>
+</body>
+</html>

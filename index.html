@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fizica LTS — Acasă</title>
+<link rel="stylesheet" href="_shared.css">
+<style>
+.hero{text-align:center;padding:5rem 2rem 3.5rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:800px;height:420px;background:radial-gradient(ellipse,rgba(26,111,168,.13) 0%,transparent 70%);pointer-events:none;}
+.hero::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 80% 20%,rgba(45,95,160,.07) 0%,transparent 60%);pointer-events:none;}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:1.1rem;position:relative;}
+.hero h1 em{font-style:italic;font-family:'Crimson Pro',serif;color:var(--accent);}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:540px;margin:0 auto 2rem;line-height:1.75;position:relative;}
+
+.stat-row{display:flex;justify-content:center;gap:3rem;margin:2.5rem 0;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-n{font-size:2rem;font-weight:700;color:var(--accent);}
+.stat-l{font-size:.8rem;color:var(--muted);}
+
+.section-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;}
+
+.feature-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:3rem;}
+.feature-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;transition:all .2s;text-decoration:none;color:var(--text);
+}
+.feature-card:hover{border-color:rgba(26,111,168,.3);transform:translateY(-3px);}
+.feature-card .fc-icon{font-size:1.8rem;margin-bottom:.8rem;}
+.feature-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem;}
+.feature-card p{font-size:.83rem;color:var(--muted);line-height:1.6;}
+.feature-card .fc-link{display:inline-block;margin-top:.8rem;font-size:.8rem;color:var(--accent);}
+
+.news-band{
+  background:linear-gradient(135deg,rgba(26,111,168,.07),rgba(45,95,160,.07));
+  border:1px solid rgba(26,111,168,.15);
+  border-radius:var(--radius);padding:1.4rem 1.6rem;margin-bottom:2rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.news-badge{background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:4px;white-space:nowrap;}
+.news-text{font-size:.875rem;color:var(--text);}
+.news-link{font-size:.8rem;color:var(--accent);text-decoration:none;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <nav>
+    <a class="nav-link active" href="index.html">Acasă</a>
+    <a class="nav-link" href="experimente.html">Experimente</a>
+    <a class="nav-link" href="formule.html">Formule</a>
+    <a class="nav-link" href="teste.html">Teste</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Fizica vine la <em>viață</em><br>prin simulări interactive</h1>
+  <p>Explorează legile fizicii prin experimente vizuale, formule interactive și teste adaptive — totul gratuit, direct în browser.</p>
+  <div class="pills" style="justify-content:center">
+    <span class="pill pill-blue">6 module</span>
+    <span class="pill pill-purple">25 simulări</span>
+    <span class="pill pill-green">Formule complete</span>
+    <span class="pill pill-amber">Teste adaptive</span>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">Capitole</div></div>
+    <div class="stat"><div class="stat-n">25</div><div class="stat-l">Simulări</div></div>
+    <div class="stat"><div class="stat-n">64</div><div class="stat-l">Formule</div></div>
+    <div class="stat"><div class="stat-n">48</div><div class="stat-l">Întrebări quiz</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="news-band">
+    <span class="news-badge">NOU</span>
+    <span class="news-text">Capitol nou: <strong>Termodinamică</strong> — simulări pentru gaze ideale, ciclul Carnot și legile termodinamicii.</span>
+    <a class="news-link" href="termodinamica.html">Explorează →</a>
+  </div>
+
+  <div class="section-label">🚀 Experimente interactive</div>
+  <div class="topic-grid" style="margin-bottom:3rem">
+    <a class="topic-card" href="mecanica.html">
+      <div class="t-icon">🎯</div>
+      <div class="t-name">Mecanică</div>
+      <div class="t-desc">Mișcare, forțe, energie, legi Newton, impuls și ciocniri.</div>
+      <div class="t-arrow">Deschide →</div>
+    </a>
+    <a class="topic-card" href="electricitate.html">
+      <div class="t-icon">⚡</div>
+      <div class="t-name">Electricitate</div>
+      <div class="t-desc">Legea lui Ohm, circuite, condensatori, câmp electric.</div>
+      <div class="t-arrow">Deschide →</div>
+    </a>
+    <a class="topic-card" href="optica.html">
+      <div class="t-icon">🌈</div>
+      <div class="t-name">Optică</div>
+      <div class="t-desc">Reflexie, refracție, lentile, prisme și spectrul electromagnetic.</div>
+      <div class="t-arrow">Deschide →</div>
+    </a>
+    <a class="topic-card" href="unde.html">
+      <div class="t-icon">🌊</div>
+      <div class="t-name">Unde</div>
+      <div class="t-desc">Unde mecanice, sonore, interferență, efect Doppler.</div>
+      <div class="t-arrow">Deschide →</div>
+    </a>
+    <a class="topic-card" href="termodinamica.html">
+      <div class="t-icon">🔥</div>
+      <div class="t-name">Termodinamică</div>
+      <div class="t-desc">Gaze ideale, temperatură, căldură, ciclul Carnot.</div>
+      <div class="t-arrow">Deschide →</div>
+    </a>
+    <a class="topic-card" href="magnetism.html">
+      <div class="t-icon">🧲</div>
+      <div class="t-name">Magnetism</div>
+      <div class="t-desc">Câmp magnetic, forța Lorentz, inducție electromagnetică.</div>
+      <div class="t-arrow">Deschide →</div>
+    </a>
+  </div>
+
+  <div class="section-label">📚 Instrumente de studiu</div>
+  <div class="feature-row">
+    <a class="feature-card" href="formule.html">
+      <div class="fc-icon">📐</div>
+      <h3>Formularul complet</h3>
+      <p>Toate formulele esențiale pentru bacalaureat și olimpiadă, organizate pe capitole.</p>
+      <span class="fc-link">64 formule →</span>
+    </a>
+    <a class="feature-card" href="teste.html">
+      <div class="fc-icon">📝</div>
+      <h3>Teste adaptive</h3>
+      <p>Întrebări cu dificultate progresivă, feedback imediat și scor detaliat.</p>
+      <span class="fc-link">Începe un test →</span>
+    </a>
+    <a class="feature-card" href="experimente.html">
+      <div class="fc-icon">🔬</div>
+      <h3>Toate simulările</h3>
+      <p>Colecție completă de experimente interactive, filtrate pe capitol.</p>
+      <span class="fc-link">Vezi colecția →</span>
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <a class="logo" href="index.html">Fizica<span>LTS</span></a>
+  <p>Platformă educațională pentru fizică interactivă</p>
+</footer>
+
+</body>
+</html>
